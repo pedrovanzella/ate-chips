@@ -1,6 +1,6 @@
-#include <iostream>
+#include "atechips.h"
 
 int main(int argc, char* argv[])
 {
-  std::cout << "I ate a Chip\n";
+  atechips::sanity();
 }

@@ -1,0 +1,3 @@
+namespace atechips {
+  void sanity();
+}
