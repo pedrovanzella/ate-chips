@@ -1,7 +1,7 @@
 #include "atechips.h"
-#include <iostream>
+#include <string>
 
-void atechips::sanity()
+std::string atechips::sanity()
 {
-  std::cout << "I ate a chip\n";
+  return "I ate 8 chips\n";
 }

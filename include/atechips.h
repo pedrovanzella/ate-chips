@@ -1,3 +1,5 @@
+#include <string>
+
 namespace atechips {
-  void sanity();
+  std::string sanity();
 }

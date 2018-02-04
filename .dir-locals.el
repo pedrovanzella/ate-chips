@@ -5,5 +5,4 @@
        (helm-make-build-dir . "build")
        (helm-make-arguments . "-j9")
        (helm-ctest-dir . "~/Code/C++/ate-chips/build/")
-       (helm-ctest-command . "ate-chips_tests")
        )))
