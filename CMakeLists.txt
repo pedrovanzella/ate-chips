@@ -58,7 +58,9 @@ file(GLOB PROJECT_TESTS ${PROJECT_SOURCE_DIR}/test/*.cpp)
 add_executable(${PROJECT_NAME} ${PROJECT_SRC} ${PROJECT_HEADERS})
 add_executable(${PROJECT_NAME}_tests ${PROJECT_TESTS} ${PROJECT_HEADERS})
 add_library(${PROJECT_NAME}_lib ${PROJECT_LIB} ${PROJECT_HEADERS})
+
 target_link_libraries(${PROJECT_NAME}_tests gtest_main)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)
 target_link_libraries(${PROJECT_NAME}_tests ${PROJECT_NAME}_lib)
+
 add_test(NAME test COMMAND ${PROJECT_NAME}_tests)
