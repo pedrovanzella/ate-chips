@@ -25,13 +25,27 @@ uint16_t ROM::get_word(int offset)
 std::string ROM::disassemble_word(int offset)
 {
   auto word = get_word(offset);
-  uint8_t first_nibble = word >> 12; // Opcodes are encoded in the first 4 bits
+  uint8_t nibbles[4] = {nibbles_for_word(word, 3), // Opcodes are encoded in the first 4 bits
+                        nibbles_for_word(word, 2),
+                        nibbles_for_word(word, 1),
+                        nibbles_for_word(word, 0),
+                        };
 
-  switch (first_nibble) {
+  switch (nibbles[0]) {
   case 0x00:
+    if (nibbles[3] == 0x0) {
+      return "CLS";
+    }
+    if (nibbles[3] == 0xe) {
+      return "RET";
+    }
+    return "NOT IMPLEMENTED";
   case 0x01:
+    return "JMP $" + std::to_string(nibbles[1]) + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
   case 0x02:
+    return "CALL $(" + std::to_string(nibbles[1]) + std::to_string(nibbles[2]) + std::to_string(nibbles[3]) + ')';
   case 0x03:
+    return "SEQ V" + std::to_string(nibbles[1]) + " $" + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
   case 0x04:
   case 0x05:
   case 0x06:
@@ -48,4 +62,9 @@ std::string ROM::disassemble_word(int offset)
   default:
     return "SOMETHING IS WRONG!";
   }
+}
+
+uint8_t ROM::nibbles_for_word(uint16_t word, uint8_t nib)
+{
+  return (word >> (4*nib)) & 0x0F;
 }
