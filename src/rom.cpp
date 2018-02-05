@@ -19,7 +19,7 @@ uint8_t ROM::get_byte(int offset)
 
 uint16_t ROM::get_word(int offset)
 {
-  return 0;
+  return (get_byte(offset * 2) << 8) + get_byte((offset * 2) + 1);
 }
 
 std::string ROM::disassemble_word(int offset)

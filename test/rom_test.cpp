@@ -22,3 +22,9 @@ TEST_F(ROMTest, ReadsBytes) {
   EXPECT_EQ(_simple_rom.get_byte(5), 5);
 }
 
+TEST_F(ROMTest, ReadsWord) {
+  EXPECT_EQ(_simple_rom.get_word(0), (0 << 8) + 1);
+  EXPECT_EQ(_simple_rom.get_word(1), (2 << 8) + 3);
+  EXPECT_EQ(_simple_rom.get_word(2), (4 << 8) + 5);
+}
+
