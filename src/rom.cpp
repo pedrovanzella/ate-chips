@@ -47,7 +47,9 @@ std::string ROM::disassemble_word(int offset)
   case 0x03:
     return "SEQ V" + std::to_string(nibbles[1]) + " $" + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
   case 0x04:
+    return "SNE V" + std::to_string(nibbles[1]) + " $" + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
   case 0x05:
+    return "SEQ V" + std::to_string(nibbles[1]) + " V" + std::to_string(nibbles[2]);
   case 0x06:
   case 0x07:
   case 0x08:
