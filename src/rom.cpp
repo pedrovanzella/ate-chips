@@ -57,7 +57,28 @@ std::string ROM::disassemble_word(int offset)
   case 0x07:
     return "ADD V" + nibble_to_hex(nibbles[1]) + " $" + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x08:
-    return "NOT IMPLEMENTED";
+    switch (nibbles [3]) {
+    case 0x00:
+      return "MOV V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x01:
+      return "OR V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x02:
+      return "AND V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x03:
+      return "XOR V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x04:
+      return "ADD V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x05:
+      return "SUB V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x06:
+      return "SHIFTR V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x07:
+      return "DIFF V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    case 0x0e:
+      return "SHIFTL V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
+    default:
+      return "NOT IMPLEMENTED";
+    }
   case 0x09:
     return "SNE V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
   case 0x0a:
@@ -69,8 +90,41 @@ std::string ROM::disassemble_word(int offset)
   case 0x0d:
     return "DRAW V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]) + " $" + nibble_to_hex(nibbles[3]);
   case 0x0e:
+    if (nibbles[2] == 0x09 && nibbles[3] == 0x0e) {
+      return "JEQK (V" + nibble_to_hex(nibbles[1]) + ")";
+    }
+    if (nibbles[2] == 0x0a && nibbles[3] == 0x01) {
+      return "JNEQK (V" + nibble_to_hex(nibbles[1]) + ")";
+    }
     return "NOT IMPLEMENTED";
   case 0x0f:
+    if (nibbles[2] == 0x00 && nibbles[3] == 0x07) {
+      return "MOVT V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x00 && nibbles[3] == 0x0a) {
+      return "MOVK V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x01 && nibbles[3] == 0x05) {
+      return "MOVT $V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x01 && nibbles[3] == 0x08) {
+      return "MOVST $V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x01 && nibbles[3] == 0x0e) {
+      return "MOVI $V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x02 && nibbles[3] == 0x09) {
+      return "MOVI $(V" + nibble_to_hex(nibbles[1]) + ')';
+    }
+    if (nibbles[2] == 0x03 && nibbles[3] == 0x03) {
+      return "BCD V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x05 && nibbles[3] == 0x05) {
+      return "MOVA $V" + nibble_to_hex(nibbles[1]);
+    }
+    if (nibbles[2] == 0x06 && nibbles[3] == 0x05) {
+      return "LDA $V" + nibble_to_hex(nibbles[1]);
+    }
     return "NOT IMPLEMENTED";
   default:
     return "SOMETHING IS WRONG!";

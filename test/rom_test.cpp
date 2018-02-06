@@ -95,10 +95,11 @@ TEST_F(ROMTest, DisassemblesEveryOPCode) {
   EXPECT_EQ(_complex_rom.disassemble_word(25), "MOVT V0");
   EXPECT_EQ(_complex_rom.disassemble_word(26), "MOVK V0");
   EXPECT_EQ(_complex_rom.disassemble_word(27), "MOVT $V0");
-  EXPECT_EQ(_complex_rom.disassemble_word(28), "MOVI $V0");
-  EXPECT_EQ(_complex_rom.disassemble_word(29), "MOVI $(V0)");
-  EXPECT_EQ(_complex_rom.disassemble_word(30), "BCD V0");
-  EXPECT_EQ(_complex_rom.disassemble_word(31), "MOVA $VA");
-  EXPECT_EQ(_complex_rom.disassemble_word(32), "LDA $VA");
+  EXPECT_EQ(_complex_rom.disassemble_word(28), "MOVST $V0");
+  EXPECT_EQ(_complex_rom.disassemble_word(29), "MOVI $V0");
+  EXPECT_EQ(_complex_rom.disassemble_word(30), "MOVI $(V0)");
+  EXPECT_EQ(_complex_rom.disassemble_word(31), "BCD V0");
+  EXPECT_EQ(_complex_rom.disassemble_word(32), "MOVA $VA");
+  EXPECT_EQ(_complex_rom.disassemble_word(33), "LDA $VA");
 }
 
