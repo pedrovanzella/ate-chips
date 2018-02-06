@@ -10,7 +10,9 @@ namespace atechips {
     void setBuffer(std::vector<uint8_t> buff);
     uint8_t get_byte(int offset);
     uint16_t get_word(int offset);
+    std::string get_hex_word(int offset);
     std::string disassemble_word(int offset);
+    size_t size();
 
   private:
     std::vector<uint8_t> _buffer;

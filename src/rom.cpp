@@ -144,3 +144,17 @@ std::string ROM::nibble_to_hex(uint8_t nibble)
 
   return std::string(hex);
 }
+
+std::string ROM::get_hex_word(int offset)
+{
+  auto first = get_byte(offset);
+  auto second = get_byte(offset + 1);
+  char hex[4];
+  std::sprintf(hex, "%x%x", first, second);
+  return hex;
+}
+
+size_t ROM::size()
+{
+  return _buffer.size();
+}
