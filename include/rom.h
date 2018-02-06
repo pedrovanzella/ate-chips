@@ -15,5 +15,6 @@ namespace atechips {
   private:
     std::vector<uint8_t> _buffer;
     uint8_t nibbles_for_word(uint16_t word, uint8_t nib);
+    std::string nibble_to_hex(uint8_t nibble);
   };
 }

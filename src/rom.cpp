@@ -1,4 +1,6 @@
 #include <iterator>
+#include <cstdio>
+#include <string>
 #include "rom.h"
 
 using namespace atechips;
@@ -41,24 +43,33 @@ std::string ROM::disassemble_word(int offset)
     }
     return "NOT IMPLEMENTED";
   case 0x01:
-    return "JMP $" + std::to_string(nibbles[1]) + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
+    return "JMP $" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x02:
-    return "CALL $(" + std::to_string(nibbles[1]) + std::to_string(nibbles[2]) + std::to_string(nibbles[3]) + ')';
+    return "CALL $(" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]) + ')';
   case 0x03:
-    return "SEQ V" + std::to_string(nibbles[1]) + " $" + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
+    return "SEQ V" + nibble_to_hex(nibbles[1]) + " $" + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x04:
-    return "SNE V" + std::to_string(nibbles[1]) + " $" + std::to_string(nibbles[2]) + std::to_string(nibbles[3]);
+    return "SNE V" + nibble_to_hex(nibbles[1]) + " $" + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x05:
-    return "SEQ V" + std::to_string(nibbles[1]) + " V" + std::to_string(nibbles[2]);
+    return "SEQ V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
   case 0x06:
+    return "MOV V" + nibble_to_hex(nibbles[1]) + " $" + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x07:
+    return "ADD V" + nibble_to_hex(nibbles[1]) + " $" + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x08:
+    return "NOT IMPLEMENTED";
   case 0x09:
+    return "SNE V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]);
   case 0x0a:
+    return "MOVI $" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x0b:
+    return "JMPO $" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x0c:
+    return "RANDAND V" + nibble_to_hex(nibbles[1]) + " $" + nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
   case 0x0d:
+    return "DRAW V" + nibble_to_hex(nibbles[1]) + " V" + nibble_to_hex(nibbles[2]) + " $" + nibble_to_hex(nibbles[3]);
   case 0x0e:
+    return "NOT IMPLEMENTED";
   case 0x0f:
     return "NOT IMPLEMENTED";
   default:
@@ -69,4 +80,13 @@ std::string ROM::disassemble_word(int offset)
 uint8_t ROM::nibbles_for_word(uint16_t word, uint8_t nib)
 {
   return (word >> (4*nib)) & 0x0F;
+}
+
+std::string ROM::nibble_to_hex(uint8_t nibble)
+{
+  char hex[2];
+
+  std::sprintf(hex, "%X", nibble);
+
+  return std::string(hex);
 }
