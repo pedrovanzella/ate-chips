@@ -147,10 +147,10 @@ std::string ROM::nibble_to_hex(uint8_t nibble)
 
 std::string ROM::get_hex_word(int offset)
 {
-  auto first = get_byte(offset);
-  auto second = get_byte(offset + 1);
+  auto first = get_byte(offset * 2);
+  auto second = get_byte((offset * 2) + 1);
   char hex[4];
-  std::sprintf(hex, "%x%x", first, second);
+  std::sprintf(hex, "%02x%02x", first, second);
   return hex;
 }
 

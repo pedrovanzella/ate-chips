@@ -103,3 +103,41 @@ TEST_F(ROMTest, DisassemblesEveryOPCode) {
   EXPECT_EQ(_complex_rom.disassemble_word(33), "LDA $VA");
 }
 
+TEST_F(ROMTest, ReturnsProperHexRepresentationForWord)
+{
+  EXPECT_EQ(_complex_rom.get_hex_word(0), "00e0");
+  EXPECT_EQ(_complex_rom.get_hex_word(1), "00ee");
+  EXPECT_EQ(_complex_rom.get_hex_word(2), "1200");
+  EXPECT_EQ(_complex_rom.get_hex_word(3), "2200");
+  EXPECT_EQ(_complex_rom.get_hex_word(4), "3000");
+  EXPECT_EQ(_complex_rom.get_hex_word(5), "4000");
+  EXPECT_EQ(_complex_rom.get_hex_word(6), "5010");
+  EXPECT_EQ(_complex_rom.get_hex_word(7), "60ab");
+  EXPECT_EQ(_complex_rom.get_hex_word(8), "7002");
+  EXPECT_EQ(_complex_rom.get_hex_word(9), "8010");
+  EXPECT_EQ(_complex_rom.get_hex_word(10), "8011");
+  EXPECT_EQ(_complex_rom.get_hex_word(11), "8012");
+  EXPECT_EQ(_complex_rom.get_hex_word(12), "8013");
+  EXPECT_EQ(_complex_rom.get_hex_word(13), "8014");
+  EXPECT_EQ(_complex_rom.get_hex_word(14), "8015");
+  EXPECT_EQ(_complex_rom.get_hex_word(15), "8016");
+  EXPECT_EQ(_complex_rom.get_hex_word(16), "8017");
+  EXPECT_EQ(_complex_rom.get_hex_word(17), "801e");
+  EXPECT_EQ(_complex_rom.get_hex_word(18), "9010");
+  EXPECT_EQ(_complex_rom.get_hex_word(19), "a200");
+  EXPECT_EQ(_complex_rom.get_hex_word(20), "b200");
+  EXPECT_EQ(_complex_rom.get_hex_word(21), "c0ab");
+  EXPECT_EQ(_complex_rom.get_hex_word(22), "d01f");
+  EXPECT_EQ(_complex_rom.get_hex_word(23), "e09e");
+  EXPECT_EQ(_complex_rom.get_hex_word(24), "e0a1");
+  EXPECT_EQ(_complex_rom.get_hex_word(25), "f007");
+  EXPECT_EQ(_complex_rom.get_hex_word(26), "f00a");
+  EXPECT_EQ(_complex_rom.get_hex_word(27), "f015");
+  EXPECT_EQ(_complex_rom.get_hex_word(28), "f018");
+  EXPECT_EQ(_complex_rom.get_hex_word(29), "f01e");
+  EXPECT_EQ(_complex_rom.get_hex_word(30), "f029");
+  EXPECT_EQ(_complex_rom.get_hex_word(31), "f033");
+  EXPECT_EQ(_complex_rom.get_hex_word(32), "fa55");
+  EXPECT_EQ(_complex_rom.get_hex_word(33), "fa65");
+}
+
