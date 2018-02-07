@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
   auto rom = ROM(buffer);
 
-  for (int i = 0; i <= rom.size(); i += 2) {
-    std::cout << 200 + i << '\t' << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
+  for (int i = 0; i <= rom.size(); ++i) {
+    std::cout << 200 + i*2 << '\t' << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
 }
