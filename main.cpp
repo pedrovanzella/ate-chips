@@ -28,14 +28,14 @@ int main(int argc, char* argv[])
   auto size = istrm.tellg();
   istrm.seekg(0);
 
-  std::vector<uint8_t> buffer;
-  buffer.reserve(size);
+  std::vector<char> buffer;
+  buffer.resize(size);
 
-  buffer.insert(buffer.begin(),
-                std::istream_iterator<uint8_t>(istrm),
-                std::istream_iterator<uint8_t>());
+  istrm.read(&buffer[0], size);
 
-  auto rom = ROM(buffer);
+  std::vector<uint8_t> new_buff(buffer.begin(), buffer.end());
+
+  auto rom = ROM(new_buff);
 
   for (int i = 0; i <= rom.size(); ++i) {
     std::cout << 200 + i*2 << '\t' << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
