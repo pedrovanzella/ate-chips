@@ -1,15 +1,14 @@
-#include <iostream>
-#include <fstream>
-#include <cstdint>
-#include <memory>
-#include <vector>
 #include "atechips.h"
 #include "rom.h"
+#include <cstdint>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <vector>
 
 using namespace atechips;
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
   std::cout << atechips::sanity();
 
   if (argc < 2) {
@@ -37,7 +36,8 @@ int main(int argc, char* argv[])
 
   auto rom = ROM(new_buff);
 
-  for (int i = 0; i <= rom.size(); ++i) {
-    std::cout << 200 + i*2 << '\t' << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
+  for (size_t i = 0; i <= rom.size(); ++i) {
+    std::cout << 200 + i * 2 << '\t' << rom.get_hex_word(i) << '\t'
+              << rom.disassemble_word(i) << '\n';
   }
 }
