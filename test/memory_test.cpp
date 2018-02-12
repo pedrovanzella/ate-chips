@@ -20,9 +20,11 @@ protected:
 };
 
 TEST_F(MemoryTest, ShouldReadFromROM) {
-  for (int i = 0x200; i <= 0x600; ++i) {
-    EXPECT_EQ(_memory[i], 0xabab);
-  }
+  EXPECT_EQ(_memory[0x200], 0xabab);
+  EXPECT_EQ(_memory[0x300], 0xabab);
+  EXPECT_EQ(_memory[0x400], 0xabab);
+  EXPECT_EQ(_memory[0x500], 0xabab);
+  EXPECT_EQ(_memory[0x5FE], 0xabab);
 }
 
 TEST_F(MemoryTest, ShouldReadFromRAM) { EXPECT_EQ(_memory[0x601], 0x00); }
