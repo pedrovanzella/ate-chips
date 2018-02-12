@@ -1,23 +1,19 @@
 #pragma once
+
 #include "atechips.h"
-#include "memory.h"
 #include "rom.h"
 #include <cstdint>
 
 namespace atechips {
-class CPU {
+class Memory {
 public:
-  CPU();
-
-  bool step();
+  Memory();
   void loadROM(ROM rom);
-  uint16_t fetch();
 
-  uint8_t V[16];
-  uint16_t PC;
-  uint16_t I;
+  uint16_t operator[](uint16_t addr);
 
 private:
-  Memory _memory;
+  ROM _rom;
+  uint8_t _ram[2560];
 };
 } // namespace atechips

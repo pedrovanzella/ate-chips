@@ -11,13 +11,18 @@ ROM::ROM() {}
 
 void ROM::setBuffer(std::vector<uint8_t> buff) { _buffer = buff; }
 
-uint8_t ROM::get_byte(int offset) { return _buffer[offset]; }
+uint8_t ROM::get_byte(uint16_t offset) { return _buffer[offset]; }
 
-uint16_t ROM::get_word(int offset) {
+uint16_t ROM::get_word(uint16_t offset) {
+  if (offset > _buffer.size()) {
+    return 0x0;
+  }
   return (get_byte(offset * 2) << 8) + get_byte((offset * 2) + 1);
 }
 
-std::string ROM::disassemble_word(int offset) {
+uint16_t ROM::operator[](uint16_t offset) { return get_word(offset); }
+
+std::string ROM::disassemble_word(uint16_t offset) {
   auto word = get_word(offset);
   uint8_t nibbles[4] = {
       nibbles_for_word(word, 3), // Opcodes are encoded in the first 4 bits
@@ -157,7 +162,7 @@ std::string ROM::nibble_to_hex(uint8_t nibble) {
   return std::string(hex);
 }
 
-std::string ROM::get_hex_word(int offset) {
+std::string ROM::get_hex_word(uint16_t offset) {
   auto first = get_byte(offset * 2);
   auto second = get_byte((offset * 2) + 1);
   char hex[5];
