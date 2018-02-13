@@ -5,11 +5,13 @@
 
 using namespace atechips;
 
-ROM::ROM(std::array<uint8_t, 1024> buf) : _buffer(buf) {}
+ROM::ROM(std::array<uint8_t, 1024> buf) { _buffer = std::move(buf); }
 
 ROM::ROM() {}
 
-void ROM::setBuffer(std::array<uint8_t, 1024> buff) { _buffer = buff; }
+void ROM::setBuffer(std::array<uint8_t, 1024> buff) {
+  _buffer = std::move(buff);
+}
 
 uint8_t ROM::get_byte(uint16_t offset) { return _buffer[offset]; }
 
