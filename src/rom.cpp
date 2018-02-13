@@ -19,7 +19,7 @@ uint16_t ROM::get_word(uint16_t offset) {
   if (offset > _buffer.size()) {
     return 0x0;
   }
-  return (get_byte(offset * 2) << 8) + get_byte((offset * 2) + 1);
+  return (get_byte(offset) << 8) + get_byte((offset) + 1);
 }
 
 uint16_t ROM::operator[](uint16_t offset) { return get_word(offset); }
@@ -165,8 +165,8 @@ std::string ROM::nibble_to_hex(uint8_t nibble) {
 }
 
 std::string ROM::get_hex_word(uint16_t offset) {
-  auto first = get_byte(offset * 2);
-  auto second = get_byte((offset * 2) + 1);
+  auto first = get_byte(offset);
+  auto second = get_byte((offset) + 1);
   char hex[5];
   std::sprintf(hex, "%02x%02x", first, second);
   return hex;

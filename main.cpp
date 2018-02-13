@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
 
   auto rom = ROM(new_buff);
 
-  for (size_t i = 0; i <= rom.size(); ++i) {
-    std::cout << std::hex << 0x200 + i * 2 << std::dec << '\t'
+  for (size_t i = 0; i <= rom.size(); i += 2) {
+    std::cout << std::hex << 0x200 + i << std::dec << '\t'
               << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
 }
