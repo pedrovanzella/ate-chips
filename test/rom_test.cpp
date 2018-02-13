@@ -6,10 +6,10 @@
 class ROMTest : public ::testing::Test {
 protected:
   virtual void SetUp() {
-    std::array<uint8_t, 1024> buff = {0, 1, 2, 3, 4, 5};
+    std::array<uint8_t, 1024> buff{0, 1, 2, 3, 4, 5};
     _simple_rom.setBuffer(buff);
 
-    std::array<uint8_t, 1024> cbuff = {
+    std::array<uint8_t, 1024> cbuff{
         0x00, 0xe0, // CLS
         0x00, 0xee, // RET
         0x12, 0x00, // JMP $200
