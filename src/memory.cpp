@@ -3,7 +3,7 @@
 
 using namespace atechips;
 
-Memory::Memory() : _ram{0} {}
+Memory::Memory() { _ram.fill(0); }
 
 void Memory::loadROM(ROM rom) { _rom = rom; }
 

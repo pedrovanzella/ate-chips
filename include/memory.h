@@ -2,6 +2,7 @@
 
 #include "atechips.h"
 #include "rom.h"
+#include <array>
 #include <cstdint>
 
 namespace atechips {
@@ -14,6 +15,6 @@ public:
 
 private:
   ROM _rom;
-  uint8_t _ram[2560];
+  std::array<uint8_t, 2560> _ram;
 };
 } // namespace atechips
