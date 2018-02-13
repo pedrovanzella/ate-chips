@@ -1,10 +1,10 @@
 #include "atechips.h"
 #include "rom.h"
+#include <array>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <vector>
 
 using namespace atechips;
 
@@ -18,26 +18,29 @@ int main(int argc, char *argv[]) {
 
   auto filename = argv[1];
 
-  std::ifstream istrm(filename, std::ios::binary | std::ios::ate);
+  std::basic_ifstream<uint8_t> istrm(filename,
+                                     std::ios::binary | std::ios::ate);
   if (!istrm.is_open()) {
     std::cerr << "Failed to open file " << filename << '\n';
     exit(1);
   }
 
   auto size = istrm.tellg();
+  if (size > 1024) {
+    std::cerr << "File size exceeds max ROM size of 1024\n";
+    exit(1);
+  }
   istrm.seekg(0);
 
-  std::vector<char> buffer;
-  buffer.resize(size);
+  std::array<uint8_t, 1024> buffer;
+  buffer.fill(0);
 
   istrm.read(&buffer[0], size);
 
-  std::vector<uint8_t> new_buff(buffer.begin(), buffer.end());
-
-  auto rom = ROM(new_buff);
+  auto rom = ROM(buffer);
 
   for (size_t i = 0; i <= rom.size(); ++i) {
-    std::cout << 200 + i * 2 << '\t' << rom.get_hex_word(i) << '\t'
-              << rom.disassemble_word(i) << '\n';
+    std::cout << std::hex << 200 + i * 2 << std::dec << '\t'
+              << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
 }

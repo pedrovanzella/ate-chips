@@ -6,11 +6,8 @@
 class MemoryTest : public ::testing::Test {
 protected:
   virtual void SetUp() {
-    std::vector<uint8_t> buffer;
-
-    for (int i = 0; i <= 0x400; ++i) {
-      buffer.push_back(0xab);
-    }
+    std::array<uint8_t, 1024> buffer;
+    buffer.fill(0xab);
 
     auto rom = atechips::ROM(buffer);
     _memory.loadROM(rom);

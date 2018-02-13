@@ -1,15 +1,15 @@
 #include "rom.h"
 #include "gtest/gtest.h"
+#include <array>
 #include <cstdint>
-#include <vector>
 
 class ROMTest : public ::testing::Test {
 protected:
   virtual void SetUp() {
-    std::vector<uint8_t> buff = {0, 1, 2, 3, 4, 5};
+    std::array<uint8_t, 1024> buff = {0, 1, 2, 3, 4, 5};
     _simple_rom.setBuffer(buff);
 
-    std::vector<uint8_t> cbuff = {
+    std::array<uint8_t, 1024> cbuff = {
         0x00, 0xe0, // CLS
         0x00, 0xee, // RET
         0x12, 0x00, // JMP $200
