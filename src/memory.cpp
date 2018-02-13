@@ -5,7 +5,7 @@ using namespace atechips;
 
 Memory::Memory() { _ram.fill(0); }
 
-void Memory::loadROM(ROM rom) { _rom = rom; }
+void Memory::loadROM(ROM rom) { _rom = std::move(rom); }
 
 uint16_t Memory::operator[](uint16_t addr) {
   if (addr >= 0x200 && addr <= 0x600) {
