@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   std::array<char, 1024> buffer;
   buffer.fill(0);
 
-  istrm.read(&buffer[0], size);
+  istrm.read(buffer.data(), size);
 
   std::array<uint8_t, 1024> new_buff;
 
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
   auto rom = ROM(new_buff);
 
   for (size_t i = 0; i <= rom.size(); ++i) {
-    std::cout << std::hex << 200 + i * 2 << std::dec << '\t'
+    std::cout << std::hex << 0x200 + i * 2 << std::dec << '\t'
               << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
 }
