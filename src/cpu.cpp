@@ -72,8 +72,8 @@ bool CPU::step() {
     }
     return true;
   case 0x06:
-    // TODO
     // MOV VX $NN
+    V[nibbles[1]] = (nibbles[2] << 4) + (nibbles[3]);
     return true;
   case 0x07:
     // TODO

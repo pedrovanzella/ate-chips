@@ -84,3 +84,10 @@ TEST_F(CPUTest, SEQV_False) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
 }
+
+TEST_F(CPUTest, MOV_VX_NN) {
+  auto rom = atechips::ROM({0x6a, 0x42});
+  _cpu.loadROM(rom);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.V[0xa], 0x42);
+}
