@@ -89,12 +89,14 @@ bool CPU::step() {
       PC += 2;
       return true;
     case 0x01:
-      // TODO
       // OR VX VY
+      V[nibbles[1]] |= V[nibbles[2]];
+      PC += 2;
       return true;
     case 0x02:
-      // TODO
       // AND VX VY
+      V[nibbles[1]] &= V[nibbles[2]];
+      PC += 2;
       return true;
     case 0x03:
       // TODO
