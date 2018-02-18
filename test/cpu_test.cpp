@@ -23,7 +23,7 @@ TEST_F(CPUTest, DoesntStepIfThereIsNoROMLoaded) {
 }
 
 TEST_F(CPUTest, LoadsROM) {
-  auto rom = atechips::ROM({0x00, 0x00});
+  auto rom = atechips::ROM({0xab, 0xab});
   _cpu.loadROM(rom);
-  EXPECT_EQ(_cpu.fetch(), 0);
+  EXPECT_EQ(_cpu.fetch(), 0xabab);
 }

@@ -1,4 +1,5 @@
 #include "rom.h"
+#include "util.h"
 #include <cstdio>
 #include <iterator>
 #include <string>
@@ -27,10 +28,11 @@ uint16_t ROM::operator[](uint16_t offset) { return get_word(offset); }
 std::string ROM::disassemble_word(uint16_t offset) {
   auto word = get_word(offset);
   uint8_t nibbles[4] = {
-      nibbles_for_word(word, 3), // Opcodes are encoded in the first 4 bits
-      nibbles_for_word(word, 2),
-      nibbles_for_word(word, 1),
-      nibbles_for_word(word, 0),
+      util::nibbles_for_word(word,
+                             3), // Opcodes are encoded in the first 4 bits
+      util::nibbles_for_word(word, 2),
+      util::nibbles_for_word(word, 1),
+      util::nibbles_for_word(word, 0),
   };
 
   switch (nibbles[0]) {
@@ -43,125 +45,115 @@ std::string ROM::disassemble_word(uint16_t offset) {
     }
     return "NOT IMPLEMENTED";
   case 0x01:
-    return "JMP $" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) +
-           nibble_to_hex(nibbles[3]);
+    return "JMP $" + util::nibble_to_hex(nibbles[1]) +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x02:
-    return "CALL $(" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) +
-           nibble_to_hex(nibbles[3]) + ')';
+    return "CALL $(" + util::nibble_to_hex(nibbles[1]) +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]) +
+           ')';
   case 0x03:
-    return "SEQ V" + nibble_to_hex(nibbles[1]) + " $" +
-           nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
+    return "SEQ V" + util::nibble_to_hex(nibbles[1]) + " $" +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x04:
-    return "SNE V" + nibble_to_hex(nibbles[1]) + " $" +
-           nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
+    return "SNE V" + util::nibble_to_hex(nibbles[1]) + " $" +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x05:
-    return "SEQ V" + nibble_to_hex(nibbles[1]) + " V" +
-           nibble_to_hex(nibbles[2]);
+    return "SEQ V" + util::nibble_to_hex(nibbles[1]) + " V" +
+           util::nibble_to_hex(nibbles[2]);
   case 0x06:
-    return "MOV V" + nibble_to_hex(nibbles[1]) + " $" +
-           nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
+    return "MOV V" + util::nibble_to_hex(nibbles[1]) + " $" +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x07:
-    return "ADD V" + nibble_to_hex(nibbles[1]) + " $" +
-           nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
+    return "ADD V" + util::nibble_to_hex(nibbles[1]) + " $" +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x08:
     switch (nibbles[3]) {
     case 0x00:
-      return "MOV V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "MOV V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x01:
-      return "OR V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "OR V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x02:
-      return "AND V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "AND V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x03:
-      return "XOR V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "XOR V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x04:
-      return "ADD V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "ADD V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x05:
-      return "SUB V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "SUB V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x06:
-      return "SHIFTR V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "SHIFTR V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x07:
-      return "DIFF V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "DIFF V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     case 0x0e:
-      return "SHIFTL V" + nibble_to_hex(nibbles[1]) + " V" +
-             nibble_to_hex(nibbles[2]);
+      return "SHIFTL V" + util::nibble_to_hex(nibbles[1]) + " V" +
+             util::nibble_to_hex(nibbles[2]);
     default:
       return "NOT IMPLEMENTED";
     }
   case 0x09:
-    return "SNE V" + nibble_to_hex(nibbles[1]) + " V" +
-           nibble_to_hex(nibbles[2]);
+    return "SNE V" + util::nibble_to_hex(nibbles[1]) + " V" +
+           util::nibble_to_hex(nibbles[2]);
   case 0x0a:
-    return "MOVI $" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) +
-           nibble_to_hex(nibbles[3]);
+    return "MOVI $" + util::nibble_to_hex(nibbles[1]) +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x0b:
-    return "JMPO $" + nibble_to_hex(nibbles[1]) + nibble_to_hex(nibbles[2]) +
-           nibble_to_hex(nibbles[3]);
+    return "JMPO $" + util::nibble_to_hex(nibbles[1]) +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x0c:
-    return "RANDAND V" + nibble_to_hex(nibbles[1]) + " $" +
-           nibble_to_hex(nibbles[2]) + nibble_to_hex(nibbles[3]);
+    return "RANDAND V" + util::nibble_to_hex(nibbles[1]) + " $" +
+           util::nibble_to_hex(nibbles[2]) + util::nibble_to_hex(nibbles[3]);
   case 0x0d:
-    return "DRAW V" + nibble_to_hex(nibbles[1]) + " V" +
-           nibble_to_hex(nibbles[2]) + " $" + nibble_to_hex(nibbles[3]);
+    return "DRAW V" + util::nibble_to_hex(nibbles[1]) + " V" +
+           util::nibble_to_hex(nibbles[2]) + " $" +
+           util::nibble_to_hex(nibbles[3]);
   case 0x0e:
     if (nibbles[2] == 0x09 && nibbles[3] == 0x0e) {
-      return "JEQK (V" + nibble_to_hex(nibbles[1]) + ")";
+      return "JEQK (V" + util::nibble_to_hex(nibbles[1]) + ")";
     }
     if (nibbles[2] == 0x0a && nibbles[3] == 0x01) {
-      return "JNEQK (V" + nibble_to_hex(nibbles[1]) + ")";
+      return "JNEQK (V" + util::nibble_to_hex(nibbles[1]) + ")";
     }
     return "NOT IMPLEMENTED";
   case 0x0f:
     if (nibbles[2] == 0x00 && nibbles[3] == 0x07) {
-      return "MOVT V" + nibble_to_hex(nibbles[1]);
+      return "MOVT V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x00 && nibbles[3] == 0x0a) {
-      return "MOVK V" + nibble_to_hex(nibbles[1]);
+      return "MOVK V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x05) {
-      return "MOVT $V" + nibble_to_hex(nibbles[1]);
+      return "MOVT $V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x08) {
-      return "MOVST $V" + nibble_to_hex(nibbles[1]);
+      return "MOVST $V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x0e) {
-      return "MOVI $V" + nibble_to_hex(nibbles[1]);
+      return "MOVI $V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x02 && nibbles[3] == 0x09) {
-      return "MOVI $(V" + nibble_to_hex(nibbles[1]) + ')';
+      return "MOVI $(V" + util::nibble_to_hex(nibbles[1]) + ')';
     }
     if (nibbles[2] == 0x03 && nibbles[3] == 0x03) {
-      return "BCD V" + nibble_to_hex(nibbles[1]);
+      return "BCD V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x05 && nibbles[3] == 0x05) {
-      return "MOVA $V" + nibble_to_hex(nibbles[1]);
+      return "MOVA $V" + util::nibble_to_hex(nibbles[1]);
     }
     if (nibbles[2] == 0x06 && nibbles[3] == 0x05) {
-      return "LDA $V" + nibble_to_hex(nibbles[1]);
+      return "LDA $V" + util::nibble_to_hex(nibbles[1]);
     }
     return "NOT IMPLEMENTED";
   default:
     return "SOMETHING IS WRONG!";
   }
-}
-
-uint8_t ROM::nibbles_for_word(uint16_t word, uint8_t nib) {
-  return (word >> (4 * nib)) & 0x0F;
-}
-
-std::string ROM::nibble_to_hex(uint8_t nibble) {
-  char hex[2];
-
-  std::sprintf(hex, "%X", nibble);
-
-  return std::string(hex);
 }
 
 std::string ROM::get_hex_word(uint16_t offset) {

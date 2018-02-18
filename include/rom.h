@@ -20,7 +20,5 @@ public:
 
 private:
   std::array<uint8_t, 1024> _buffer;
-  uint8_t nibbles_for_word(uint16_t word, uint8_t nib);
-  std::string nibble_to_hex(uint8_t nibble);
 };
 } // namespace atechips

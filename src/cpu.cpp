@@ -6,7 +6,7 @@ using namespace atechips;
 CPU::CPU() : V{0}, PC(0x200), I(0) {}
 
 bool CPU::step() {
-  // Fetch
+  // auto instruction = fetch();
   // Decode
   // Execute
   return false;
