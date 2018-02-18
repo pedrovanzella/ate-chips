@@ -84,8 +84,9 @@ bool CPU::step() {
   case 0x08:
     switch (nibbles[3]) {
     case 0x00:
-      // TODO
       // MOV VX VY
+      V[nibbles[1]] = V[nibbles[2]];
+      PC += 2;
       return true;
     case 0x01:
       // TODO
