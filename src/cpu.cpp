@@ -74,10 +74,12 @@ bool CPU::step() {
   case 0x06:
     // MOV VX $NN
     V[nibbles[1]] = (nibbles[2] << 4) + (nibbles[3]);
+    PC += 2;
     return true;
   case 0x07:
     // ADD VX $NN
     V[nibbles[1]] += (nibbles[2] << 4) + (nibbles[3]);
+    PC += 2;
     return true;
   case 0x08:
     switch (nibbles[3]) {

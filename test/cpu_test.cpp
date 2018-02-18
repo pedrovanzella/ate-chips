@@ -90,6 +90,7 @@ TEST_F(CPUTest, MOV_VX_NN) {
   _cpu.loadROM(rom);
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.V[0xa], 0x42);
+  EXPECT_EQ(_cpu.PC, 0x202);
 }
 
 TEST_F(CPUTest, ADD_VX_NN) {
@@ -98,4 +99,5 @@ TEST_F(CPUTest, ADD_VX_NN) {
   _cpu.V[0xa] = 0x2;
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.V[0xa], 0x7);
+  EXPECT_EQ(_cpu.PC, 0x202);
 }
