@@ -19,6 +19,9 @@ bool CPU::step() {
 
   switch (nibbles[0]) {
   case 0x00:
+    if (nibbles[2] != 0xe) {
+      return false;
+    }
     if (nibbles[3] == 0x0) {
       // CLS
       return true;
