@@ -27,3 +27,10 @@ TEST_F(CPUTest, LoadsROM) {
   _cpu.loadROM(rom);
   EXPECT_EQ(_cpu.fetch(), 0xabab);
 }
+
+TEST_F(CPUTest, JMP_NNN) {
+  auto rom = atechips::ROM({0x13, 0x42});
+  _cpu.loadROM(rom);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x342);
+}
