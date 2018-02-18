@@ -135,8 +135,9 @@ bool CPU::step() {
     }
     return true;
   case 0x0a:
-    // TODO
     // MOVI $NNN
+    I = (nibbles[1] << 8) + (nibbles[2] << 4) + nibbles[3];
+    PC += 2;
     return true;
   case 0x0b:
     // TODO
