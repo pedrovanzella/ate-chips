@@ -99,8 +99,9 @@ bool CPU::step() {
       PC += 2;
       return true;
     case 0x03:
-      // TODO
       // XOR VX VY
+      V[nibbles[1]] ^= V[nibbles[2]];
+      PC += 2;
       return true;
     case 0x04:
       // TODO
