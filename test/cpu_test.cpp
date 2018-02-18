@@ -34,3 +34,35 @@ TEST_F(CPUTest, JMP_NNN) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x342);
 }
+
+TEST_F(CPUTest, SEQ_True) {
+  auto rom = atechips::ROM({0x3a, 0xab});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xab;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x204);
+}
+
+TEST_F(CPUTest, SEQ_False) {
+  auto rom = atechips::ROM({0x3a, 0xab});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xff;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+}
+
+TEST_F(CPUTest, SNE_False) {
+  auto rom = atechips::ROM({0x4a, 0xab});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xab;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+}
+
+TEST_F(CPUTest, SNE_True) {
+  auto rom = atechips::ROM({0x4a, 0xab});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xff;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x204);
+}

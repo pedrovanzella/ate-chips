@@ -42,12 +42,20 @@ bool CPU::step() {
     // CALL $(NNN)
     return true;
   case 0x03:
-    // TODO
     // SEQ VX $NN
+    if (V[nibbles[1]] == ((nibbles[2] << 4) + (nibbles[3]))) {
+      PC += 4;
+    } else {
+      PC += 2;
+    }
     return true;
   case 0x04:
-    // TODO
     // SNE VX $NN
+    if (V[nibbles[1]] != ((nibbles[2] << 4) + (nibbles[3]))) {
+      PC += 4;
+    } else {
+      PC += 2;
+    }
     return true;
   case 0x05:
     // TODO
