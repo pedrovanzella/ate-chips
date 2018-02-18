@@ -66,3 +66,21 @@ TEST_F(CPUTest, SNE_True) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x204);
 }
+
+TEST_F(CPUTest, SEQV_True) {
+  auto rom = atechips::ROM({0x5a, 0xb0});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xab;
+  _cpu.V[0xb] = 0xab;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x204);
+}
+
+TEST_F(CPUTest, SEQV_False) {
+  auto rom = atechips::ROM({0x5a, 0xb0});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xff;
+  _cpu.V[0xb] = 0xab;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+}

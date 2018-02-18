@@ -25,6 +25,9 @@ bool CPU::step() {
     if (nibbles[3] == 0x0) {
       // TODO
       // CLS
+      // for (int i = 0xf00; i <= 0xfff; i++) {
+      //  _memory[i] = 0;
+      //}
       return true;
     }
     if (nibbles[3] == 0xe) {
@@ -58,8 +61,15 @@ bool CPU::step() {
     }
     return true;
   case 0x05:
-    // TODO
     // SEQ VX VY
+    if (nibbles[3] != 0) {
+      return false;
+    }
+    if (V[nibbles[1]] == V[nibbles[2]]) {
+      PC += 4;
+    } else {
+      PC += 2;
+    }
     return true;
   case 0x06:
     // TODO
