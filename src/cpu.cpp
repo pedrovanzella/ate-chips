@@ -127,8 +127,12 @@ bool CPU::step() {
       return false;
     }
   case 0x09:
-    // TODO
     // SNE VX VY
+    if (V[nibbles[1]] != V[nibbles[2]]) {
+      PC += 4;
+    } else {
+      PC += 2;
+    }
     return true;
   case 0x0a:
     // TODO

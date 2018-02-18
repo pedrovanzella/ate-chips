@@ -140,3 +140,21 @@ TEST_F(CPUTest, XOR_VX_VY) {
   EXPECT_EQ(_cpu.V[0xa], 0xf0 ^ 0x0f);
   EXPECT_EQ(_cpu.PC, 0x202);
 }
+
+TEST_F(CPUTest, SNE_VX_VY_True) {
+  auto rom = atechips::ROM({0x9a, 0xb0});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xab;
+  _cpu.V[0xb] = 0xff;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x204);
+}
+
+TEST_F(CPUTest, SNE_VX_VY_False) {
+  auto rom = atechips::ROM({0x9a, 0xb0});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xff;
+  _cpu.V[0xb] = 0xff;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+}
