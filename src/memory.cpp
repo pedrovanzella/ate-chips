@@ -11,5 +11,11 @@ uint16_t Memory::operator[](uint16_t addr) {
   if (addr >= 0x200 && addr <= 0x600) {
     return _rom[addr - 0x200];
   }
-  return _ram[addr];
+  return (_ram[addr] << 8) + _ram[addr + 1];
+}
+
+void Memory::write(uint16_t addr, uint16_t val) {
+  // Silently write to RAM even if the address is shadowed by ROM
+  _ram[addr] = val >> 8;
+  _ram[addr + 1] = val & 0xff;
 }

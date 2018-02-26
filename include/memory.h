@@ -12,6 +12,7 @@ public:
   void loadROM(ROM rom);
 
   uint16_t operator[](uint16_t addr);
+  void write(uint16_t addr, uint16_t val);
 
 private:
   ROM _rom;
