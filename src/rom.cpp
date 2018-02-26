@@ -14,18 +14,18 @@ void ROM::setBuffer(std::array<uint8_t, 1024> buff) {
   _buffer = std::move(buff);
 }
 
-uint8_t ROM::get_byte(uint16_t offset) { return _buffer[offset]; }
+const uint8_t ROM::get_byte(const uint16_t offset) const { return _buffer[offset]; }
 
-uint16_t ROM::get_word(uint16_t offset) {
+const uint16_t ROM::get_word(const uint16_t offset) const {
   if (offset > _buffer.size()) {
     return 0x0;
   }
   return (get_byte(offset) << 8) + get_byte((offset) + 1);
 }
 
-uint16_t ROM::operator[](uint16_t offset) { return get_word(offset); }
+const uint16_t ROM::operator[](const uint16_t offset) const { return get_word(offset); }
 
-std::string ROM::disassemble_word(uint16_t offset) {
+const std::string ROM::disassemble_word(const uint16_t offset) const {
   auto word = get_word(offset);
   uint8_t nibbles[4] = {
       util::nibbles_for_word(word,
@@ -156,7 +156,7 @@ std::string ROM::disassemble_word(uint16_t offset) {
   }
 }
 
-std::string ROM::get_hex_word(uint16_t offset) {
+const std::string ROM::get_hex_word(const uint16_t offset) const {
   auto first = get_byte(offset);
   auto second = get_byte((offset) + 1);
   char hex[5];
