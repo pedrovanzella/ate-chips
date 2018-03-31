@@ -208,8 +208,11 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[2] == 0x06 && nibbles[3] == 0x05) {
-      // TODO
       // LDA $VX
+      for (int i = 0; i <= nibbles[1]; i++) {
+        V[i] = _memory[I++];
+      }
+      PC += 2;
       return true;
     }
     return false;

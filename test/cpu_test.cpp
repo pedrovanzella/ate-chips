@@ -181,3 +181,22 @@ TEST_F(CPUTest, MOVA_$VX) {
   }
   EXPECT_EQ(_cpu.I, 0x612);
 }
+
+TEST_F(CPUTest, LDA_$VX) {
+  auto rom = atechips::ROM({0xff, 0x65});
+  _cpu.loadROM(rom);
+  _cpu.I = 0x602;
+  for (int i = 0x602; i <= 0x612; i += 2) {
+    _cpu.write_to_mem(i, 0xabcd);
+  }
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  for (int i = 0x0; i <= 0xf; i++) {
+    if (i % 2 == 1) {
+      EXPECT_EQ(_cpu.V[i], 0xab);
+    } else {
+      EXPECT_EQ(_cpu.V[i], 0xcd);
+    }
+  }
+  EXPECT_EQ(_cpu.I, 0x612);
+}
