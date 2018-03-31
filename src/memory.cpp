@@ -19,3 +19,7 @@ void Memory::write(uint16_t addr, uint16_t val) {
   _ram[addr] = val >> 8;
   _ram[addr + 1] = val & 0xff;
 }
+
+void Memory::write_byte(uint16_t addr, uint8_t val) {
+  _ram[addr] = val;
+}

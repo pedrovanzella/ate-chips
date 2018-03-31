@@ -200,8 +200,11 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[2] == 0x05 && nibbles[3] == 0x05) {
-      // TODO
       // MOVA $VX
+      for (int i = 0; i <= nibbles[1]; i++) {
+        _memory.write_byte(I++, V[i]);
+      }
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x06 && nibbles[3] == 0x05) {
@@ -219,3 +222,9 @@ bool CPU::step() {
 void CPU::loadROM(ROM rom) { _memory.loadROM(rom); }
 
 uint16_t CPU::fetch() { return _memory[PC]; }
+
+uint16_t CPU::fetch(uint16_t addr) { return _memory[addr]; }
+
+void CPU::write_to_mem(uint16_t addr, uint16_t val) {
+  _memory.write(addr, val);
+}

@@ -166,3 +166,18 @@ TEST_F(CPUTest, MOVI_NNN) {
   EXPECT_EQ(_cpu.I, 0x342);
   EXPECT_EQ(_cpu.PC, 0x202);
 }
+
+TEST_F(CPUTest, MOVA_$VX) {
+  auto rom = atechips::ROM({0xff, 0x55});
+  _cpu.loadROM(rom);
+  _cpu.I = 0x602;
+  for (int i = 0x0; i <= 0xf; i++) {
+    _cpu.V[i] = 0xab;
+  }
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  for (int i = 0x602; i <= 0x610; i += 2) {
+    EXPECT_EQ(_cpu.fetch(i), 0xabab);
+  }
+  EXPECT_EQ(_cpu.I, 0x612);
+}

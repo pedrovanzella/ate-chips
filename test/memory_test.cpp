@@ -37,6 +37,12 @@ TEST_F(MemoryTest, ShouldWriteToRAM) {
   EXPECT_EQ(_memory[0x642], 0xabcd);
 }
 
+TEST_F(MemoryTest, ShouldWriteByteToRAM) {
+  _memory.write_byte(0x658, 0xab);
+  _memory.write_byte(0x659, 0xcd);
+  EXPECT_EQ(_memory[0x658], 0xabcd);
+}
+
 TEST_F(MemoryTest, ShouldNotWriteToROM) {
   _memory.write(0x242, 0xffff);
   EXPECT_EQ(_memory[0x242], 0xabab);
