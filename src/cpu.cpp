@@ -105,9 +105,9 @@ bool CPU::step() {
       return true;
     case 0x04:
       // ADD VX VY
-      if (V[nibbles[1]] + V[nibbles[2]] > 0xf) {
+      if (V[nibbles[1]] + V[nibbles[2]] > 0xff) {
         // Carry
-        V[nibbles[1]] = V[nibbles[1]] + V[nibbles[2]] - 0xf;
+        V[nibbles[1]] = V[nibbles[1]] + V[nibbles[2]] - 0xff;
         V[0xf] = 0x1;
       } else {
         V[nibbles[1]] += V[nibbles[2]];
@@ -118,7 +118,7 @@ bool CPU::step() {
       // SUB VX VY
       if (V[nibbles[1]] < V[nibbles[2]]) {
         // Borrow
-        V[nibbles[1]] = V[nibbles[1]] - V[nibbles[2]] + 0xf;
+        V[nibbles[1]] = V[nibbles[1]] - V[nibbles[2]] + 0xff;
         V[0xf] = 0x1;
       } else {
         V[nibbles[1]] -= V[nibbles[2]];
