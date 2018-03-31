@@ -104,8 +104,14 @@ bool CPU::step() {
       PC += 2;
       return true;
     case 0x04:
-      // TODO
       // ADD VX VY
+      if (V[nibbles[1]] + V[nibbles[2]] > 0xf) {
+        V[nibbles[1]] = 0x0;
+        V[0xf] = 0x1;
+      } else {
+        V[nibbles[1]] += V[nibbles[2]];
+      }
+      PC += 2;
       return true;
     case 0x05:
       // TODO
