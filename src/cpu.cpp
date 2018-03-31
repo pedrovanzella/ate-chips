@@ -106,7 +106,7 @@ bool CPU::step() {
     case 0x04:
       // ADD VX VY
       if (V[nibbles[1]] + V[nibbles[2]] > 0xf) {
-        V[nibbles[1]] = 0x0;
+        V[nibbles[1]] = V[nibbles[1]] + V[nibbles[2]] - 0xf;
         V[0xf] = 0x1;
       } else {
         V[nibbles[1]] += V[nibbles[2]];
