@@ -126,8 +126,13 @@ bool CPU::step() {
       PC += 2;
       return true;
     case 0x06:
-      // TODO
       // SHIFTR VX VY
+      {
+        auto lsb = V[nibbles[2]] >> 7;
+        V[nibbles[1]] = V[nibbles[2]] = V[nibbles[2]] >> 1;
+        V[0xf] = lsb;
+      }
+      PC += 2;
       return true;
     case 0x07:
       // TODO
