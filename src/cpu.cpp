@@ -5,7 +5,7 @@
 
 using namespace atechips;
 
-CPU::CPU() : V{0}, PC(0x200), I(0) {}
+CPU::CPU() : V{0}, PC(0x200), I(0), delay_timer(0xff), sound_timer(0xff) {}
 
 bool CPU::step() {
   /* Returns false if we hit an invalid instruction */
@@ -199,8 +199,9 @@ bool CPU::step() {
     return false;
   case 0x0f:
     if (nibbles[2] == 0x00 && nibbles[3] == 0x07) {
-      // TODO
       // MOVT VX
+      V[nibbles[1]] = delay_timer;
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x00 && nibbles[3] == 0x0a) {
@@ -209,13 +210,15 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x05) {
-      // TODO
       // MOVT $VX
+      delay_timer = V[nibbles[1]];
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x08) {
-      // TODO
       // MOVST $VX
+      sound_timer = V[nibbles[1]];
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x0e) {
@@ -273,3 +276,5 @@ uint16_t CPU::fetch(uint16_t addr) { return _memory[addr]; }
 void CPU::write_to_mem(uint16_t addr, uint16_t val) {
   _memory.write(addr, val);
 }
+
+void CPU::start_timers() {}

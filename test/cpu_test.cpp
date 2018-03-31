@@ -335,3 +335,27 @@ TEST_F(CPUTest, DIFF_VX_VY_With_Borrow) {
   EXPECT_EQ(_cpu.V[0x0], 0x01);
   EXPECT_EQ(_cpu.V[0xf], 0x00);
 }
+
+TEST_F(CPUTest, MOVT_VX) {
+  auto rom = atechips::ROM({0xfa, 0x07});
+  _cpu.loadROM(rom);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0xa], 0xff);
+}
+
+TEST_F(CPUTest, MOVT_$VX) {
+  auto rom = atechips::ROM({0xfa, 0x15});
+  _cpu.loadROM(rom);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.delay_timer, 0x00);
+}
+
+TEST_F(CPUTest, MOVST_$VX) {
+  auto rom = atechips::ROM({0xfa, 0x18});
+  _cpu.loadROM(rom);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.sound_timer, 0x00);
+}

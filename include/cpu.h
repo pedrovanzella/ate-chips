@@ -21,6 +21,12 @@ public:
   uint16_t PC;
   uint16_t I;
 
+  // Timers count down from 0xff to 0x0 at 60hz
+  uint8_t delay_timer;
+  uint8_t sound_timer;
+
+  void start_timers();
+
 private:
   Memory _memory;
 };
