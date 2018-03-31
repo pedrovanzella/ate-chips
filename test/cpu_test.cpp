@@ -236,7 +236,7 @@ TEST_F(CPUTest, ADD_VX_VY_With_Carry) {
   EXPECT_EQ(_cpu.V[0xf], 0x01);
 }
 
-TEST_F(CPUTest, SUB_VX_VY_No_Carry) {
+TEST_F(CPUTest, SUB_VX_VY_No_Borrow) {
   auto rom = atechips::ROM({0x80, 0x15});
   _cpu.loadROM(rom);
   _cpu.V[0x0] = 0x02;
@@ -244,10 +244,10 @@ TEST_F(CPUTest, SUB_VX_VY_No_Carry) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
   EXPECT_EQ(_cpu.V[0x0], 0x01);
-  EXPECT_EQ(_cpu.V[0xf], 0x00);
+  EXPECT_EQ(_cpu.V[0xf], 0x01);
 }
 
-TEST_F(CPUTest, SUB_VX_VY_With_Carry) {
+TEST_F(CPUTest, SUB_VX_VY_With_Borrow) {
   auto rom = atechips::ROM({0x80, 0x15});
   _cpu.loadROM(rom);
   _cpu.V[0x0] = 0x03;
@@ -255,7 +255,7 @@ TEST_F(CPUTest, SUB_VX_VY_With_Carry) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
   EXPECT_EQ(_cpu.V[0x0], 0x03);
-  EXPECT_EQ(_cpu.V[0xf], 0x01);
+  EXPECT_EQ(_cpu.V[0xf], 0x00);
 }
 
 TEST_F(CPUTest, JMPO_$NNN) {
@@ -312,4 +312,26 @@ TEST_F(CPUTest, SHIFTL_VX_VY) {
   EXPECT_EQ(_cpu.V[0xa], 0x56);
   EXPECT_EQ(_cpu.V[0xb], 0x56);
   EXPECT_EQ(_cpu.V[0xf], 0x1);
+}
+
+TEST_F(CPUTest, DIFF_VX_VY_No_Borrow) {
+  auto rom = atechips::ROM({0x80, 0x17});
+  _cpu.loadROM(rom);
+  _cpu.V[0x0] = 0x01;
+  _cpu.V[0x1] = 0x02;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0x0], 0x01);
+  EXPECT_EQ(_cpu.V[0xf], 0x01);
+}
+
+TEST_F(CPUTest, DIFF_VX_VY_With_Borrow) {
+  auto rom = atechips::ROM({0x80, 0x17});
+  _cpu.loadROM(rom);
+  _cpu.V[0x0] = 0x04;
+  _cpu.V[0x1] = 0x03;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0x0], 0x01);
+  EXPECT_EQ(_cpu.V[0xf], 0x00);
 }

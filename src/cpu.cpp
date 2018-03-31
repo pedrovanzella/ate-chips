@@ -1,6 +1,7 @@
 #include "cpu.h"
 #include "rom.h"
 #include "util.h"
+#include <cstdlib>
 
 using namespace atechips;
 
@@ -119,9 +120,10 @@ bool CPU::step() {
       if (V[nibbles[1]] < V[nibbles[2]]) {
         // Borrow
         V[nibbles[1]] = V[nibbles[1]] - V[nibbles[2]] + 0xff;
-        V[0xf] = 0x1;
+        V[0xf] = 0x0;
       } else {
         V[nibbles[1]] -= V[nibbles[2]];
+        V[0xf] = 0x1;
       }
       PC += 2;
       return true;
@@ -135,8 +137,16 @@ bool CPU::step() {
       PC += 2;
       return true;
     case 0x07:
-      // TODO
       // DIFF VX VY
+      if (V[nibbles[1]] > V[nibbles[2]]) {
+        // Borrow
+        V[nibbles[1]] = std::abs(V[nibbles[2]] - V[nibbles[1]]);
+        V[0xf] = 0x0;
+      } else {
+        V[nibbles[1]] = V[nibbles[2]] - V[nibbles[1]];
+        V[0xf] = 0x1;
+      }
+      PC += 2;
       return true;
     case 0x0e:
       // SHIFTL VX VY
