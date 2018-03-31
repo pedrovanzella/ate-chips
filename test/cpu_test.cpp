@@ -200,3 +200,16 @@ TEST_F(CPUTest, LDA_$VX) {
   }
   EXPECT_EQ(_cpu.I, 0x612);
 }
+
+TEST_F(CPUTest, CLS) {
+  auto rom = atechips::ROM({0x00, 0xe0});
+  _cpu.loadROM(rom);
+  for (int i = 0xf00; i <= 0xfff; i += 2) {
+    _cpu.write_to_mem(i, 0xffff);
+  }
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  for (int i = 0xf00; i <= 0xfff; i+= 2) {
+    EXPECT_EQ(_cpu.fetch(i), 0x0000);
+  }
+}

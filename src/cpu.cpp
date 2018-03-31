@@ -23,11 +23,11 @@ bool CPU::step() {
       return false;
     }
     if (nibbles[3] == 0x0) {
-      // TODO
       // CLS
-      // for (int i = 0xf00; i <= 0xfff; i++) {
-      //  _memory[i] = 0;
-      //}
+      for (int i = 0xf00; i <= 0xfff; i += 2) {
+        _memory.write(i, 0x0000);
+      }
+      PC += 2;
       return true;
     }
     if (nibbles[3] == 0xe) {
