@@ -235,3 +235,25 @@ TEST_F(CPUTest, ADD_VX_VY_With_Carry) {
   EXPECT_EQ(_cpu.V[0x0], 0x3);
   EXPECT_EQ(_cpu.V[0xf], 0x1);
 }
+
+TEST_F(CPUTest, SUB_VX_VY_No_Carry) {
+  auto rom = atechips::ROM({0x80, 0x15});
+  _cpu.loadROM(rom);
+  _cpu.V[0x0] = 0x2;
+  _cpu.V[0x1] = 0x1;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0x0], 0x1);
+  EXPECT_EQ(_cpu.V[0xf], 0x0);
+}
+
+TEST_F(CPUTest, SUB_VX_VY_With_Carry) {
+  auto rom = atechips::ROM({0x80, 0x15});
+  _cpu.loadROM(rom);
+  _cpu.V[0x0] = 0x3;
+  _cpu.V[0x1] = 0xf;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0x0], 0x3);
+  EXPECT_EQ(_cpu.V[0xf], 0x1);
+}
