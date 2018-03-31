@@ -154,8 +154,8 @@ bool CPU::step() {
     PC += 2;
     return true;
   case 0x0b:
-    // TODO
     // JMPO $NNN
+    PC += V[0] + ((nibbles[1] << 8) + (nibbles[2] << 4) + nibbles[3]);
     return true;
   case 0x0c:
     // TODO

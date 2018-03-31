@@ -257,3 +257,11 @@ TEST_F(CPUTest, SUB_VX_VY_With_Carry) {
   EXPECT_EQ(_cpu.V[0x0], 0x3);
   EXPECT_EQ(_cpu.V[0xf], 0x1);
 }
+
+TEST_F(CPUTest, JMPO_$NNN) {
+  auto rom = atechips::ROM({0xb2, 0x42});
+  _cpu.loadROM(rom);
+  _cpu.V[0] = 0x2;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x444);
+}
