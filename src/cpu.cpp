@@ -199,8 +199,16 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[2] == 0x01 && nibbles[3] == 0x0e) {
-      // TODO
       // MOVI $VX
+      if (I + V[nibbles[1]] > 0xfff) {
+        // Carry
+        I = I + V[nibbles[1]] - 0xfff;
+        V[0xf] = 0x01;
+      } else {
+        I += V[nibbles[1]];
+        V[0xf] = 0x00;
+      }
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x02 && nibbles[3] == 0x09) {

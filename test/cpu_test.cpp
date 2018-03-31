@@ -265,3 +265,27 @@ TEST_F(CPUTest, JMPO_$NNN) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x444);
 }
+
+TEST_F(CPUTest, MOVI_$VX_No_Carry) {
+  auto rom = atechips::ROM({0xfa, 0x1e});
+  _cpu.loadROM(rom);
+  _cpu.I = 0x600;
+  _cpu.V[0xf] = 0xff;
+  _cpu.V[0xa] = 0xff;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.I, 0x6ff);
+  EXPECT_EQ(_cpu.V[0xf], 0x0);
+}
+
+TEST_F(CPUTest, MOVI_$VX_With_Carry) {
+  auto rom = atechips::ROM({0xfa, 0x1e});
+  _cpu.loadROM(rom);
+  _cpu.I = 0xf01;
+  _cpu.V[0xf] = 0xff;
+  _cpu.V[0xa] = 0xff;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.I, 0x001);
+  EXPECT_EQ(_cpu.V[0xf], 0x1);
+}
