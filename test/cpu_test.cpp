@@ -301,3 +301,15 @@ TEST_F(CPUTest, SHIFTR_VX_VY) {
   EXPECT_EQ(_cpu.V[0xb], 0x55);
   EXPECT_EQ(_cpu.V[0xf], 0x1);
 }
+
+TEST_F(CPUTest, SHIFTL_VX_VY) {
+  auto rom = atechips::ROM({0x8a, 0xbe});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0xff;
+  _cpu.V[0xb] = 0xab;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0xa], 0x56);
+  EXPECT_EQ(_cpu.V[0xb], 0x56);
+  EXPECT_EQ(_cpu.V[0xf], 0x1);
+}

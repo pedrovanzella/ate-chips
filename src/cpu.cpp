@@ -139,8 +139,13 @@ bool CPU::step() {
       // DIFF VX VY
       return true;
     case 0x0e:
-      // TODO
       // SHIFTL VX VY
+      {
+        auto msb = V[nibbles[2]] & 0x1;
+        V[nibbles[1]] = V[nibbles[2]] = V[nibbles[2]] << 1;
+        V[0xf] = msb;
+      }
+      PC += 2;
       return true;
     default:
       return false;
