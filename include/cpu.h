@@ -20,6 +20,10 @@ public:
   uint8_t V[16];
   uint16_t PC;
   uint16_t I;
+  uint16_t SP;
+
+  void push_to_stack(uint16_t val);
+  uint16_t pop_from_stack();
 
   // Timers count down from 0xff to 0x0 at 60hz
   uint8_t delay_timer;

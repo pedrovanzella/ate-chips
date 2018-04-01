@@ -5,7 +5,7 @@
 
 using namespace atechips;
 
-CPU::CPU() : V{0}, PC(0x200), I(0), delay_timer(0xff), sound_timer(0xff) {}
+CPU::CPU() : V{0}, PC(0x200), I(0), SP(0xea0), delay_timer(0xff), sound_timer(0xff) {}
 
 bool CPU::step() {
   /* Returns false if we hit an invalid instruction */
@@ -42,8 +42,9 @@ bool CPU::step() {
     PC = (nibbles[1] << 8) + (nibbles[2] << 4) + (nibbles[3]);
     return true;
   case 0x02:
-    // TODO
     // CALL $(NNN)
+    push_to_stack(PC + 2);
+    PC = (nibbles[1] << 8) + (nibbles[2] << 4) + (nibbles[3]);
     return true;
   case 0x03:
     // SEQ VX $NN
@@ -278,3 +279,14 @@ void CPU::write_to_mem(uint16_t addr, uint16_t val) {
 }
 
 void CPU::start_timers() {}
+
+void CPU::push_to_stack(uint16_t val) {
+  _memory.write(SP, val);
+  SP += 2;
+}
+
+uint16_t CPU::pop_from_stack() {
+  auto val = _memory[SP - 2];
+  SP -= 2;
+  return val;
+}

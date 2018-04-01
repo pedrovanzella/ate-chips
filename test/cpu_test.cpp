@@ -359,3 +359,14 @@ TEST_F(CPUTest, MOVST_$VX) {
   EXPECT_EQ(_cpu.PC, 0x202);
   EXPECT_EQ(_cpu.sound_timer, 0x00);
 }
+
+TEST_F(CPUTest, CALL_$NNN) {
+  auto rom = atechips::ROM({0x23, 0x00});
+  _cpu.loadROM(rom);
+  EXPECT_EQ(_cpu.PC, 0x200);
+  EXPECT_EQ(_cpu.SP, 0xea0);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x300);
+  EXPECT_EQ(_cpu.SP, 0xea2);
+  EXPECT_EQ(_cpu.pop_from_stack(), 0x202);
+}
