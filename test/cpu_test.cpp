@@ -370,3 +370,12 @@ TEST_F(CPUTest, CALL_$NNN) {
   EXPECT_EQ(_cpu.SP, 0xea2);
   EXPECT_EQ(_cpu.pop_from_stack(), 0x202);
 }
+
+TEST_F(CPUTest, RET) {
+  auto rom = atechips::ROM({0x00, 0xee});
+  _cpu.loadROM(rom);
+  _cpu.push_to_stack(0x222);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.SP, 0xea0);
+  EXPECT_EQ(_cpu.PC, 0x222);
+}

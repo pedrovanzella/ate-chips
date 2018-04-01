@@ -32,8 +32,8 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[3] == 0xe) {
-      // TODO
       // RET
+      PC = pop_from_stack();
       return true;
     }
     return false;
