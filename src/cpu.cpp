@@ -5,7 +5,7 @@
 
 using namespace atechips;
 
-CPU::CPU() : V{0}, PC(0x200), I(0), SP(0xea0), delay_timer(0xff), sound_timer(0xff) {}
+CPU::CPU() : V{0}, PC(0x200), I(0), SP(0xea0), keypad{false}, delay_timer(0xff), sound_timer(0xff) {}
 
 bool CPU::step() {
   /* Returns false if we hit an invalid instruction */
@@ -190,6 +190,7 @@ bool CPU::step() {
     // RANDAND VX $AB
     return true;
   case 0x0d:
+    // TODO
     // DRAW VX VY $N
     // Display is at 0xf00 - 0xfff
     /* Draws a sprite at coordinate (VX, VY)
@@ -205,13 +206,19 @@ bool CPU::step() {
     return true;
   case 0x0e:
     if (nibbles[2] == 0x09 && nibbles[3] == 0x0e) {
-      // TODO
       // JEQK (VX)
+      if (keypad[V[nibbles[1]]]) {
+        PC += 2;
+      }
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x0a && nibbles[3] == 0x01) {
-      // TODO
       // JNEQK (VX)
+      if (!keypad[V[nibbles[1]]]) {
+        PC += 2;
+      }
+      PC += 2;
       return true;
     }
     return false;

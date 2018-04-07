@@ -399,3 +399,39 @@ TEST_F(CPUTest, BCD_VX) {
   EXPECT_EQ(_cpu.fetch(0x700), (0x1 << 8) + 0x2);
   EXPECT_EQ(_cpu.fetch(0x702), 0x3 << 8);
 }
+
+TEST_F(CPUTest, JEQK_VX_True) {
+  auto rom = atechips::ROM({0xea, 0x9e});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0x5;
+  _cpu.keypad[0x5] = true;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x204);
+}
+
+TEST_F(CPUTest, JEQK_VX_False) {
+  auto rom = atechips::ROM({0xea, 0x9e});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0x5;
+  _cpu.keypad[0x5] = false;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+}
+
+TEST_F(CPUTest, JNEQK_VX_True) {
+  auto rom = atechips::ROM({0xea, 0xa1});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0x5;
+  _cpu.keypad[0x5] = false;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x204);
+}
+
+TEST_F(CPUTest, JNEQK_VX_False) {
+  auto rom = atechips::ROM({0xea, 0xa1});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0x5;
+  _cpu.keypad[0x5] = true;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+}

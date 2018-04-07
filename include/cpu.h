@@ -22,6 +22,8 @@ public:
   uint16_t I;
   uint16_t SP;
 
+  bool keypad[16];
+
   void push_to_stack(uint16_t val);
   uint16_t pop_from_stack();
 
