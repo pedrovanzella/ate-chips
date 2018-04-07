@@ -341,7 +341,7 @@ TEST_F(CPUTest, MOVT_VX) {
   _cpu.loadROM(rom);
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
-  EXPECT_EQ(_cpu.V[0xa], 0xff);
+  EXPECT_EQ(_cpu.V[0xa], 0xfe);
 }
 
 TEST_F(CPUTest, MOVT_$VX) {

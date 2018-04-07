@@ -18,6 +18,13 @@ bool CPU::step() {
       util::nibbles_for_word(op, 0),
   };
 
+  /* First we take care of our timers */
+  /* Ideally this should be moved into a separate thread,
+     to make sure they change at 60Hz. For now, though
+     this is good enough */
+  delay_timer--; // This is good enough to get them
+  sound_timer--; // to wrap around
+
   switch (nibbles[0]) {
   case 0x00:
     if (nibbles[2] != 0xe) {
