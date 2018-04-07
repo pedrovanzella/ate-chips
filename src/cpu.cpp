@@ -243,8 +243,9 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[2] == 0x02 && nibbles[3] == 0x09) {
-      // TODO
       // MOVI $(VX)
+      I = V[nibbles[1]] * 5;
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x03 && nibbles[3] == 0x03) {

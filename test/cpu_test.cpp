@@ -379,3 +379,12 @@ TEST_F(CPUTest, RET) {
   EXPECT_EQ(_cpu.SP, 0xea0);
   EXPECT_EQ(_cpu.PC, 0x222);
 }
+
+TEST_F(CPUTest, MOVI_$VX) {
+  auto rom = atechips::ROM({{0xfa, 0x29}});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0x5;
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.I, 0x19);
+}
