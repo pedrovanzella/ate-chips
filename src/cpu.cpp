@@ -5,7 +5,11 @@
 
 using namespace atechips;
 
-CPU::CPU() : V{0}, PC(0x200), I(0), SP(0xea0), keypad{false}, delay_timer(0xff), sound_timer(0xff) {}
+CPU::CPU() : V{0}, PC(0x200), I(0), SP(0xea0), keypad{false}, delay_timer(0xff), sound_timer(0xff) {
+  std::random_device rd;
+  _gen = std::mt19937(rd());
+  _rng = std::uniform_int_distribution<>(0, 255);
+                                                              }
 
 bool CPU::step() {
   /* Returns false if we hit an invalid instruction */
@@ -186,8 +190,13 @@ bool CPU::step() {
     PC += V[0] + ((nibbles[1] << 8) + (nibbles[2] << 4) + nibbles[3]);
     return true;
   case 0x0c:
-    // TODO
     // RANDAND VX $AB
+    {
+      auto rand = _rng(_gen);
+      auto ab = (nibbles[2] << 4) + (nibbles[3]);
+      V[nibbles[1]] = rand & ab;
+    }
+    PC += 2;
     return true;
   case 0x0d:
     // TODO
@@ -317,4 +326,8 @@ uint16_t CPU::pop_from_stack() {
   auto val = _memory[SP - 2];
   SP -= 2;
   return val;
+}
+
+void CPU::set_rng(int start, int end) {
+  _rng = std::uniform_int_distribution<>(start, end);
 }

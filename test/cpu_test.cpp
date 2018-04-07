@@ -435,3 +435,13 @@ TEST_F(CPUTest, JNEQK_VX_False) {
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
 }
+
+TEST_F(CPUTest, RANDAND_VX_$AB) {
+  auto rom = atechips::ROM({0xca, 0xab});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 0x42;
+  _cpu.set_rng(100, 100);
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.V[0xa], 0xab & 100);
+}

@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "rom.h"
 #include <cstdint>
+#include <random>
 
 namespace atechips {
 class CPU {
@@ -33,7 +34,11 @@ public:
 
   void start_timers();
 
+  void set_rng(int start, int end);
+
 private:
   Memory _memory;
+  std::uniform_int_distribution<> _rng;
+  std::mt19937 _gen;
 };
 } // namespace atechips
