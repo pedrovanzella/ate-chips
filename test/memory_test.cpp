@@ -25,7 +25,7 @@ TEST_F(MemoryTest, ShouldReadFromROM) {
 }
 
 TEST_F(MemoryTest, ShouldReadFromRAM) {
-  EXPECT_EQ(_memory[0x600], 0x00);
+  EXPECT_EQ(_memory[0x601], 0x00);
   EXPECT_EQ(_memory[0x700], 0x00);
   EXPECT_EQ(_memory[0x800], 0x00);
   EXPECT_EQ(_memory[0x900], 0x00);
