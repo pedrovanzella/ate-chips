@@ -28,6 +28,10 @@ Memory::Memory() {
   }
 }
 
+uint8_t Memory::get_byte(uint16_t addr) {
+  return _ram[addr];
+}
+
 void Memory::loadROM(ROM rom) { _rom = std::move(rom); }
 
 uint16_t Memory::operator[](uint16_t addr) {

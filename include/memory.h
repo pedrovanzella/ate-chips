@@ -14,6 +14,7 @@ public:
   uint16_t operator[](uint16_t addr);
   void write(uint16_t addr, uint16_t val);
   void write_byte(uint16_t addr, uint8_t val);
+  uint8_t get_byte(uint16_t addr);
 
 private:
   ROM _rom;
