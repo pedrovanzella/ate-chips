@@ -249,8 +249,11 @@ bool CPU::step() {
       return true;
     }
     if (nibbles[2] == 0x03 && nibbles[3] == 0x03) {
-      // TODO
       // BCD VX
+      _memory.write_byte(I, V[nibbles[1]] / 100);
+      _memory.write_byte(I + 1, (V[nibbles[1]] / 10) - ((V[nibbles[1]] / 100) * 10));
+      _memory.write_byte(I + 2, V[nibbles[1]] % 10);
+      PC += 2;
       return true;
     }
     if (nibbles[2] == 0x05 && nibbles[3] == 0x05) {
