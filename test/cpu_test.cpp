@@ -445,3 +445,79 @@ TEST_F(CPUTest, RANDAND_VX_$AB) {
   EXPECT_EQ(_cpu.PC, 0x202);
   EXPECT_EQ(_cpu.V[0xa], 0xab & 100);
 }
+
+TEST_F(CPUTest, DRAW_VX_VY_$N_No_collision) {
+  auto rom = atechips::ROM({0xda, 0xb8});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 5;
+  _cpu.V[0xb] = 8;
+  _cpu.I = 0x700;
+  // Memory is blank, no collision
+  _cpu.write_to_mem(0x700, 0xabab);
+  _cpu.write_to_mem(0x702, 0xabab);
+  _cpu.write_to_mem(0x704, 0xabab);
+  _cpu.write_to_mem(0x708, 0xabab);
+
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.I, 0x700);
+  EXPECT_EQ(_cpu.V[0xf], 0x0);
+
+  auto i = (0xf00 + (0x8 * 5)) + 1;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+}
+
+TEST_F(CPUTest, DRAW_VX_VY_$N_With_collision) {
+  auto rom = atechips::ROM({0xda, 0xb8});
+  _cpu.loadROM(rom);
+  _cpu.V[0xa] = 5;
+  _cpu.V[0xb] = 8;
+  _cpu.I = 0x700;
+
+  _cpu.write_to_mem(0xf29, 0xff);
+
+  _cpu.write_to_mem(0x700, 0xabab);
+  _cpu.write_to_mem(0x702, 0xabab);
+  _cpu.write_to_mem(0x704, 0xabab);
+  _cpu.write_to_mem(0x708, 0xabab);
+
+  EXPECT_EQ(_cpu.step(), true);
+  EXPECT_EQ(_cpu.PC, 0x202);
+  EXPECT_EQ(_cpu.I, 0x700);
+  EXPECT_EQ(_cpu.V[0xf], 0x0);
+
+  auto i = (0xf00 + (0x8 * 5)) + 1;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+  EXPECT_EQ(_cpu.fetch(i), 0xab00);
+  i += 0x8;
+
+  EXPECT_EQ(_cpu.V[0xf], 0x1);
+}
