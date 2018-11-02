@@ -47,3 +47,15 @@ TEST_F(MemoryTest, ShouldNotWriteToROM) {
   _memory.write(0x242, 0xffff);
   EXPECT_EQ(_memory[0x242], 0xabab);
 }
+
+TEST_F(MemoryTest, ShouldReadBitFromVideoRAM) {
+  _memory.write(0xF00, 0xffff);
+  EXPECT_EQ(_memory.get_video_bit(0x00), 1);
+  EXPECT_EQ(_memory.get_video_bit(0x0F), 1);
+  EXPECT_EQ(_memory.get_video_bit(0x10), 0);
+}
+
+TEST_F(MemoryTest, ShouldWriteBitToVideoRAM) {
+  _memory.write_video_bit(0x00, 1);
+  EXPECT_EQ(_memory[0xF00], 1<<16); // Memory returns 16 bits
+}

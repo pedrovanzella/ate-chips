@@ -50,3 +50,12 @@ void Memory::write(uint16_t addr, uint16_t val) {
 void Memory::write_byte(uint16_t addr, uint8_t val) {
   _ram[addr] = val;
 }
+
+uint1_t Memory::get_video_bit(uint8_t addr) {
+  //auto effective_addr = 0xF00 + addr;
+  return 0;
+}
+
+void Memory::write_video_bit(uint8_t addr, uint1_t bit) {
+
+}

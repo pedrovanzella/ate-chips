@@ -6,6 +6,8 @@
 #include <cstdint>
 
 namespace atechips {
+
+typedef bool uint1_t;
 class Memory {
 public:
   Memory();
@@ -15,6 +17,9 @@ public:
   void write(uint16_t addr, uint16_t val);
   void write_byte(uint16_t addr, uint8_t val);
   uint8_t get_byte(uint16_t addr);
+
+  uint1_t get_video_bit(uint8_t addr);
+  void write_video_bit(uint8_t addr, uint1_t bit);
 
 private:
   ROM _rom;
