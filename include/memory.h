@@ -4,6 +4,7 @@
 #include "rom.h"
 #include <array>
 #include <cstdint>
+#include <bitset>
 
 namespace atechips {
 
@@ -24,5 +25,6 @@ public:
 private:
   ROM _rom;
   std::array<uint8_t, 2560> _ram;
+  std::bitset<256 * 8> _vram;
 };
 } // namespace atechips
