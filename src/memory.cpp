@@ -1,12 +1,6 @@
 #include "memory.h"
 #include "rom.h"
 
-/* a=target variable, b=bit number to act upon 0-n */
-#define BIT_SET(a,b) ((a) |= (1ULL<<(b)))
-#define BIT_CLEAR(a,b) ((a) &= ~(1ULL<<(b)))
-#define BIT_FLIP(a,b) ((a) ^= (1ULL<<(b)))
-#define BIT_CHECK(a,b) (!!((a) & (1ULL<<(b))))        // '!!' to make sure this returns 0 or 1
-
 using namespace atechips;
 
 Memory::Memory() {
@@ -45,15 +39,6 @@ uint16_t Memory::operator[](uint16_t addr) {
     // read from ROM
     return _rom[addr - 0x200];
   }
-  if (addr >= 0xF00) {
-    // read from VRAM
-    std::bitset<16> data;
-    auto vram_addr = addr - 0xF00;
-    for (int i = 0; i < 16; i++) {
-      data[i] = _vram[vram_addr + i];
-    }
-    return static_cast<uint16_t>(data.to_ulong());
-  }
   return (_ram[addr] << 8) + _ram[addr + 1];
 }
 
@@ -61,25 +46,8 @@ void Memory::write(uint16_t addr, uint16_t val) {
   // Silently write to RAM even if the address is shadowed by ROM
   _ram[addr] = val >> 8;
   _ram[addr + 1] = val & 0xff;
-
-  // write to vram too
-  if (addr >= 0xF00) {
-    auto vram_addr = addr - 0xF00;
-    std::bitset<16> bval = val;
-    for (int i = 0; i < 16; i++) {
-      _vram[vram_addr + i] = bval[i];
-    }
-  }
 }
 
 void Memory::write_byte(uint16_t addr, uint8_t val) {
   _ram[addr] = val;
-}
-
-uint1_t Memory::get_video_bit(uint8_t addr) {
-  return _vram[addr];
-}
-
-void Memory::write_video_bit(uint8_t addr, uint1_t bit) {
-  _vram[addr] = bit;
 }
