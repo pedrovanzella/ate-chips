@@ -19,7 +19,16 @@ uint1_t Vram::read_bit(uint8_t row, u_int8_t col) {
     return 0;
 }
 
-bool Vram::write_byte(uint8_t row, uint8_t col) {
+bool Vram::write_byte(uint8_t row, uint8_t col, uint8_t byte) {
+    auto collision = false;
     // return true if a bit is flipped from set to unset only
-    return false; // stub
+    if (col > max_col) return false;
+
+    auto max = max_col - 8;
+    if (max > max_col) max = max_col;
+    for (int i = col; i < max; ++i) {
+        if (_vram[col][i]) collision = true;
+        _vram[row][i] = (byte >> i) & 1;
+    }
+    return collision;
 }
