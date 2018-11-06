@@ -18,3 +18,8 @@ uint1_t Vram::read_bit(uint8_t row, u_int8_t col) {
     }
     return 0;
 }
+
+bool Vram::write_byte(uint8_t row, uint8_t col) {
+    // return true if a bit is flipped from set to unset only
+    return false; // stub
+}

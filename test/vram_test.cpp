@@ -26,3 +26,15 @@ TEST_F(VramTest, ShouldReadAndWriteToVram) {
     EXPECT_EQ(_vram.read_bit(1, 2), 0);
     EXPECT_EQ(_vram.read_bit(1, 3), 0);
 }
+
+TEST_F(VramTest, ShouldWriteByteWithinBounds) {
+    
+}
+
+TEST_F(VramTest, ShouldWriteByteOutOfBounds) {
+
+}
+
+TEST_F(VramTest, ShouldFlagCollision) {
+
+}
