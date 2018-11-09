@@ -36,6 +36,13 @@ TEST_F(VramTest, ShouldWriteByteWithinBounds) {
     for (int i = 10; i < 18; ++i) {
         EXPECT_EQ(_vram.read_bit(10, i), 1);
     }
+    _vram.write_byte(20, 20, 0x0F);
+    for (int i = 20; i < 24; ++i) {
+        EXPECT_EQ(_vram.read_bit(20, i), 0);
+    }
+    for (int i = 24; i < 28; ++i) {
+        EXPECT_EQ(_vram.read_bit(20, i), 1);
+    }
 }
 
 TEST_F(VramTest, ShouldWriteByteOutOfBounds) {

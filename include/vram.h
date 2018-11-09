@@ -20,6 +20,6 @@ public:
 
 private:
     // 32 rows of 64 cols
-    std::array<std::array<uint1_t, max_row>, max_col> _vram;
+    std::array<std::array<uint1_t, max_col>, max_row> _vram;
 };
 }
