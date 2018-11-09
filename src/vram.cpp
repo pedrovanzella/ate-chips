@@ -24,9 +24,11 @@ bool Vram::write_byte(uint8_t row, uint8_t col, uint8_t byte) {
     bool collision = false;
     auto column = col + 7;
     for (int i = 0; i < 8; ++i) {
-        auto bit = (1 << i) & byte;
-        column -= i;
-        if (!bit && read_bit(row, column)) collision = true;
+        auto bit = (byte & (1 << i)) >> i;
+        column -= 1;
+        if (!bit && read_bit(row, column)) {
+            collision = true;
+        }
         write_bit(row, column, bit);
     }
     return collision;
