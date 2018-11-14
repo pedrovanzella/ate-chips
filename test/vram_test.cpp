@@ -56,3 +56,15 @@ TEST_F(VramTest, ShouldFlagCollision) {
     _vram.write_bit(0, 0, 1);
     EXPECT_EQ(_vram.write_byte(0, 0, 0b01111111), true);
 }
+
+TEST_F(VramTest, ShouldReadByte) {
+    _vram.write_bit(0, 0, 1);
+    _vram.write_bit(0, 1, 0);
+    _vram.write_bit(0, 2, 1);
+    _vram.write_bit(0, 3, 0);
+    _vram.write_bit(0, 4, 1);
+    _vram.write_bit(0, 5, 0);
+    _vram.write_bit(0, 6, 1);
+    _vram.write_bit(0, 7, 0);
+    EXPECT_EQ(_vram.read_byte(0, 0), 0b10101010);
+}

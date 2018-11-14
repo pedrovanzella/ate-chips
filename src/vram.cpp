@@ -33,3 +33,14 @@ bool Vram::write_byte(uint8_t row, uint8_t col, uint8_t byte) {
     }
     return collision;
 }
+
+uint8_t Vram::read_byte(uint8_t row, uint8_t col) {
+    uint8_t byte = 0;
+
+    for (auto column = col; column < max_col && column < col + 7; ++column) {
+        byte += _vram[row][column];
+        byte <<= 1;
+    }
+
+    return byte;
+}

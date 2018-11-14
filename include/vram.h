@@ -18,6 +18,8 @@ public:
     // returns true if there was a collision
     bool write_byte(uint8_t row, uint8_t col, uint8_t byte);
 
+    uint8_t read_byte(uint8_t row, uint8_t col);
+
 private:
     // 32 rows of 64 cols
     std::array<std::array<uint1_t, max_col>, max_row> _vram;
