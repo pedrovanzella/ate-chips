@@ -199,7 +199,6 @@ bool CPU::step() {
     PC += 2;
     return true;
   case 0x0d:
-    // TODO
     // DRAW VX VY $N
     // Display is at 0xf00 - 0xfff
     /* Draws a sprite at coordinate (VX, VY)
@@ -212,6 +211,18 @@ bool CPU::step() {
 
        VF is set to 1 if any screen pixels are flipped from set to
        unset when the sprite is drawn, and to 0 if that doesn’t happen */
+      {
+        auto vx = V[nibbles[1]];
+        auto vy = V[nibbles[2]];
+        auto n = nibbles[3];
+        for (int i = 0; i < n; ++i)
+        {
+          if(_memory.vram().write_byte(vx, vy + i, _memory[I])) {
+            V[0xf] = true;
+          }
+        }
+      }
+      PC += 2;
     return true;
   case 0x0e:
     if (nibbles[2] == 0x09 && nibbles[3] == 0x0e) {
