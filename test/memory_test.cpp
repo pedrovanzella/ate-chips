@@ -51,8 +51,10 @@ TEST_F(MemoryTest, ShouldNotWriteToROM) {
 TEST_F(MemoryTest, ShouldWriteToVRAM) {
   _memory.write_byte(0xf00, 0xff);
   EXPECT_EQ(_memory.vram().read_byte(0, 0), 0xff);
-  _memory.write_byte(0xf20, 0xab);
-  EXPECT_EQ(_memory.vram().read_byte(1, 0), 0xab); //CHECK THIS
+  _memory.write_byte(0xf08, 0xab);
+  EXPECT_EQ(_memory.vram().read_byte(1, 0), 0xab);
+  _memory.write_byte(0xf13, 0xaa);
+  EXPECT_EQ(_memory.vram().read_byte(2, 3 * 8), 0xaa);
 }
 
 TEST_F(MemoryTest, ShouldReadFromVRAM) {

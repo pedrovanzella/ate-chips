@@ -67,4 +67,14 @@ TEST_F(VramTest, ShouldReadByte) {
     _vram.write_bit(0, 6, 1);
     _vram.write_bit(0, 7, 0);
     EXPECT_EQ(_vram.read_byte(0, 0), 0b10101010);
+
+    _vram.write_bit(1, 0, 1);
+    _vram.write_bit(1, 1, 1);
+    _vram.write_bit(1, 2, 1);
+    _vram.write_bit(1, 3, 1);
+    _vram.write_bit(1, 4, 1);
+    _vram.write_bit(1, 5, 1);
+    _vram.write_bit(1, 6, 1);
+    _vram.write_bit(1, 7, 1);
+    EXPECT_EQ(_vram.read_byte(1, 0), 0b11111111);
 }
