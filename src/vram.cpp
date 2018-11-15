@@ -41,6 +41,7 @@ uint8_t Vram::read_byte(uint8_t row, uint8_t col) {
         byte += _vram[row][column];
         byte <<= 1;
     }
+    byte += _vram[row][col + 7];
 
     return byte;
 }
