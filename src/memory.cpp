@@ -68,9 +68,9 @@ Vram& Memory::vram() {
   return _vram;
 }
 
-std::pair<uint8_t, uint8_t> Memory::addr_to_coords(uint16_t addr) {
-  auto base = addr - 0xf00;
-  auto row = base / Vram::max_row;
+std::pair<uint8_t, uint8_t> atechips::addr_to_coords(uint16_t addr) {
+  auto base = (addr - 0xf00) * 8;
+  auto row = base / Vram::max_col;
   auto col = base % Vram::max_col;
   return std::pair<uint8_t, uint8_t>(row, col);
 }
