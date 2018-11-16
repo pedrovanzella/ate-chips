@@ -79,3 +79,10 @@ TEST(VideoCoordsTest, ShouldConvertFromAddrToCoords) {
   EXPECT_EQ(row4, 2);
   EXPECT_EQ(col4, 8);
 }
+
+TEST(VideoCoordsTest, ShouldConvertFromCoordsToAddr) {
+  EXPECT_EQ(atechips::coords_to_addr(0, 0), 0xf00);
+  EXPECT_EQ(atechips::coords_to_addr(1, 0), 0xf08);
+  EXPECT_EQ(atechips::coords_to_addr(1, 5*8), 0xf0d);
+  EXPECT_EQ(atechips::coords_to_addr(2, 8), 0xf11);
+}

@@ -74,3 +74,11 @@ std::pair<uint8_t, uint8_t> atechips::addr_to_coords(uint16_t addr) {
   auto col = base % Vram::max_col;
   return std::pair<uint8_t, uint8_t>(row, col);
 }
+
+uint16_t atechips::coords_to_addr(uint8_t row, uint8_t col) {
+  auto addr = atechips::Memory::vram_addr;
+
+  addr += (row * 8) + (col / 8);
+
+  return addr;
+}

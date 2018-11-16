@@ -33,4 +33,5 @@ private:
 };
   
 std::pair<uint8_t, uint8_t> addr_to_coords(uint16_t addr);
+uint16_t coords_to_addr(uint8_t row, uint8_t col);
 } // namespace atechips
