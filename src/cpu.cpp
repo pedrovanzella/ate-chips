@@ -216,11 +216,10 @@ bool CPU::step() {
         auto vx = V[nibbles[1]];
         auto vy = V[nibbles[2]];
         auto n = nibbles[3];
-        auto eye = _memory[I];
         for (int i = 0; i < n; ++i)
         {
-          if(_memory.vram().write_byte(vx, vy + i, eye + i)) {
-            V[0xf] = true;
+          if(_memory.vram().write_byte(vx + i, vy, _memory.get_byte(I + i))) {
+            V[0xf] = 0x1;
           }
         }
       }
