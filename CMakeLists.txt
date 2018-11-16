@@ -48,6 +48,8 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
+find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB PROJECT_HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
 
@@ -60,7 +62,7 @@ add_executable(${PROJECT_NAME}_tests ${PROJECT_TESTS} ${PROJECT_HEADERS})
 add_library(${PROJECT_NAME}_lib ${PROJECT_LIB} ${PROJECT_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}_tests gtest_main)
-target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib sfml-graphics sfml-audio)
 target_link_libraries(${PROJECT_NAME}_tests ${PROJECT_NAME}_lib)
 
 add_test(NAME test COMMAND ${PROJECT_NAME}_tests)

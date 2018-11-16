@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <SFML/Graphics.hpp>
 
 using namespace atechips;
 
@@ -46,6 +47,24 @@ int main(int argc, char *argv[]) {
   for (size_t i = 0; i <= rom.size(); i += 2) {
     std::cout << std::hex << 0x200 + i << std::dec << '\t'
               << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
+  }
+
+  sf::RenderWindow window(sf::VideoMode(800, 600), "AteChips");
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+    }
+
+    window.clear(sf::Color::Black);
+
+    // draw
+    // window.draw();
+    
+    window.display();
   }
 
   return 0;
