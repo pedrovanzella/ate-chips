@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 
   istrm.read(buffer.data(), size);
 
-  std::array<uint8_t, 1024> new_buff;
+  std::array<uint8_t, 1024> new_buff {0};
 
   std::copy_n(std::make_move_iterator(buffer.begin()), size, new_buff.begin());
 
