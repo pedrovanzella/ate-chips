@@ -216,9 +216,10 @@ bool CPU::step() {
         auto vx = V[nibbles[1]];
         auto vy = V[nibbles[2]];
         auto n = nibbles[3];
+        auto eye = _memory[I];
         for (int i = 0; i < n; ++i)
         {
-          if(_memory.vram().write_byte(vx, vy + i, _memory[I])) {
+          if(_memory.vram().write_byte(vx, vy + i, eye + i)) {
             V[0xf] = true;
           }
         }
@@ -342,4 +343,8 @@ uint16_t CPU::pop_from_stack() {
 
 void CPU::set_rng(int start, int end) {
   _rng = std::uniform_int_distribution<>(start, end);
+}
+
+Memory& CPU::memory() {
+  return _memory;
 }

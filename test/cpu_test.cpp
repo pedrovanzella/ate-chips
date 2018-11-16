@@ -450,75 +450,64 @@ TEST_F(CPUTest, RANDAND_VX_dAB) {
 TEST_F(CPUTest, DRAW_VX_VY_dN_No_collision) {
   auto rom = atechips::ROM({0xda, 0xb8});
   _cpu.loadROM(rom);
-  _cpu.V[0xa] = 5;
-  _cpu.V[0xb] = 8;
+  _cpu.V[0xa] = 0;
+  _cpu.V[0xb] = 0;
   _cpu.I = 0x700;
-  // Memory is blank, no collision
-  _cpu.write_to_mem(0x700, 0xabab);
-  _cpu.write_to_mem(0x702, 0xabab);
-  _cpu.write_to_mem(0x704, 0xabab);
-  _cpu.write_to_mem(0x708, 0xabab);
+
+  EXPECT_EQ(_cpu.fetch(atechips::Memory::vram_addr), 0x0); // vram starts blank
+
+  for (auto a = 0x700; a < 0x70a; a += 2) {
+    // Seed some arbitrary data where I points to
+    _cpu.write_to_mem(a, 0xabab);
+  }
 
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
-  EXPECT_EQ(_cpu.I, 0x700);
-  EXPECT_EQ(_cpu.V[0xf], 0x0);
+  EXPECT_EQ(_cpu.I, 0x700); // I doesn't change
+  EXPECT_EQ(_cpu.V[0xf], 0x0); // collision is unset
 
-  auto i = (atechips::Memory::vram_addr + (0x8 * 5)) + 1;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
+  // Expect it to have written to the proper locations
+  EXPECT_EQ(_cpu.memory().vram().read_byte(0, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(1, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(2, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(3, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(4, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(5, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(6, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(7, 0), 0xab);
 }
 
 TEST_F(CPUTest, DRAW_VX_VY_dN_With_collision) {
   auto rom = atechips::ROM({0xda, 0xb8});
   _cpu.loadROM(rom);
-  _cpu.V[0xa] = 5;
-  _cpu.V[0xb] = 8;
+  _cpu.V[0xa] = 0;
+  _cpu.V[0xb] = 0;
   _cpu.I = 0x700;
 
-  _cpu.write_to_mem(0xf29, 0xff);
+  EXPECT_EQ(_cpu.fetch(atechips::Memory::vram_addr), 0x0); // vram starts blank
 
-  _cpu.write_to_mem(0x700, 0xabab);
-  _cpu.write_to_mem(0x702, 0xabab);
-  _cpu.write_to_mem(0x704, 0xabab);
-  _cpu.write_to_mem(0x708, 0xabab);
+  // write something to video memory
+  _cpu.write_to_mem(atechips::Memory::vram_addr, 0xffff);
+
+  EXPECT_EQ(_cpu.fetch(atechips::Memory::vram_addr), 0xffff); // wrote through MMU
+
+  for (auto a = 0x700; a < 0x70a; a += 2) {
+    // Seed some arbitrary data where I points to
+    _cpu.write_to_mem(a, 0xabab);
+  }
 
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
   EXPECT_EQ(_cpu.I, 0x700);
-  EXPECT_EQ(_cpu.V[0xf], 0x0);
+  EXPECT_EQ(_cpu.V[0xf], 0x1); // collision should be set
 
-  auto i = (atechips::Memory::vram_addr + (0x8 * 5)) + 1;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-
-  EXPECT_EQ(_cpu.V[0xf], 0x1);
+  // Expect it to have written to the proper locations
+  EXPECT_EQ(_cpu.memory().vram().read_byte(0, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(1, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(2, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(3, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(4, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(5, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(6, 0), 0xab);
+  EXPECT_EQ(_cpu.memory().vram().read_byte(7, 0), 0xab);
 }
