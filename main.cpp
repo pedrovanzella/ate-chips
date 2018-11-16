@@ -6,9 +6,24 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <thread>
 #include <SFML/Graphics.hpp>
 
 using namespace atechips;
+
+void renderingThread(sf::RenderWindow* window) {
+  std::cout << "[render]\n";
+
+  window->setActive(true);
+
+  while (window->isOpen()) {
+    window->clear(sf::Color::Black);
+    // draw
+
+    // end the current frame
+    window->display();
+  }
+}
 
 int main(int argc, char *argv[]) {
   std::cout << atechips::sanity();
@@ -50,6 +65,9 @@ int main(int argc, char *argv[]) {
   }
 
   sf::RenderWindow window(sf::VideoMode(800, 600), "AteChips");
+  window.setActive(false);
+
+  std::thread render(renderingThread, &window);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -58,14 +76,9 @@ int main(int argc, char *argv[]) {
         window.close();
       }
     }
-
-    window.clear(sf::Color::Black);
-
-    // draw
-    // window.draw();
-    
-    window.display();
   }
+
+  render.join();
 
   return 0;
 }
