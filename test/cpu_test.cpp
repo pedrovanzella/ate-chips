@@ -467,14 +467,9 @@ TEST_F(CPUTest, DRAW_VX_VY_dN_No_collision) {
   EXPECT_EQ(_cpu.V[0xf], 0x0); // collision is unset
 
   // Expect it to have written to the proper locations
-  EXPECT_EQ(_cpu.memory().vram().read_byte(0, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(1, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(2, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(3, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(4, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(5, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(6, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(7, 0), 0xab);
+  for (int i = 0; i < 8; ++i) {
+    EXPECT_EQ(_cpu.memory().vram().read_byte(i, 0), 0xab);
+  }
 }
 
 TEST_F(CPUTest, DRAW_VX_VY_dN_With_collision) {
@@ -502,12 +497,7 @@ TEST_F(CPUTest, DRAW_VX_VY_dN_With_collision) {
   EXPECT_EQ(_cpu.V[0xf], 0x1); // collision should be set
 
   // Expect it to have written to the proper locations
-  EXPECT_EQ(_cpu.memory().vram().read_byte(0, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(1, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(2, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(3, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(4, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(5, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(6, 0), 0xab);
-  EXPECT_EQ(_cpu.memory().vram().read_byte(7, 0), 0xab);
+  for (int i = 0; i < 8; ++i) {
+    EXPECT_EQ(_cpu.memory().vram().read_byte(i, 0), 0xab);
+  }
 }
