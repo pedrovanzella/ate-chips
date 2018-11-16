@@ -20,6 +20,11 @@ void renderingThread(sf::RenderWindow* window) {
     window->clear(sf::Color::Black);
     // draw
 
+    sf::RectangleShape rect(sf::Vector2f(50.f, 50.f));
+    rect.setFillColor(sf::Color(100, 255, 50));
+
+    window->draw(rect);
+
     // end the current frame
     window->display();
   }
