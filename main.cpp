@@ -47,4 +47,6 @@ int main(int argc, char *argv[]) {
     std::cout << std::hex << 0x200 + i << std::dec << '\t'
               << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
+
+  return 0;
 }
