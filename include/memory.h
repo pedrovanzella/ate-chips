@@ -21,6 +21,11 @@ public:
 
   Vram& vram();
 
+  static const uint16_t vram_addr = 0xf00;
+  static const uint16_t mem_limit = 0xfff;
+  static const uint16_t rom_lower = 0x200;
+  static const uint16_t rom_upper = 0x600;
+
 private:
   ROM _rom;
   std::array<uint8_t, 2560> _ram;

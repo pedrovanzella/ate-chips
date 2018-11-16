@@ -29,7 +29,7 @@ Memory::Memory() : _vram() {
 }
 
 uint8_t Memory::get_byte(uint16_t addr) {
-  if (addr >= 0xf00) {
+  if (addr >= vram_addr) {
     // read from vram
     auto [row, col] = addr_to_coords(addr);
     return _vram.read_byte(row, col);
@@ -41,9 +41,9 @@ uint8_t Memory::get_byte(uint16_t addr) {
 void Memory::loadROM(ROM rom) { _rom = std::move(rom); }
 
 uint16_t Memory::operator[](uint16_t addr) {
-  if (addr >= 0x200 && addr <= 0x600) {
+  if (addr >= rom_lower && addr <= rom_upper) {
     // read from ROM
-    return _rom[addr - 0x200];
+    return _rom[addr - rom_lower];
   }
   return (get_byte(addr) << 8) + get_byte(addr + 1);
 }
@@ -54,7 +54,7 @@ void Memory::write(uint16_t addr, uint16_t val) {
 }
 
 void Memory::write_byte(uint16_t addr, uint8_t val) {
-  if (addr >= 0xf00) {
+  if (addr >= vram_addr) {
     // write to vram
     auto [row, col] = addr_to_coords(addr);
     _vram.write_byte(row, col, val);
@@ -69,7 +69,7 @@ Vram& Memory::vram() {
 }
 
 std::pair<uint8_t, uint8_t> atechips::addr_to_coords(uint16_t addr) {
-  auto base = (addr - 0xf00) * 8;
+  auto base = (addr - atechips::Memory::vram_addr) * 8;
   auto row = base / Vram::max_col;
   auto col = base % Vram::max_col;
   return std::pair<uint8_t, uint8_t>(row, col);

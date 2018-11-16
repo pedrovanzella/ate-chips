@@ -36,7 +36,7 @@ bool CPU::step() {
     }
     if (nibbles[3] == 0x0) {
       // CLS
-      for (int i = 0xf00; i <= 0xfff; i += 2) {
+      for (int i = Memory::vram_addr; i <= Memory::mem_limit; i += 2) {
         _memory.write(i, 0x0000);
       }
       PC += 2;
@@ -201,6 +201,7 @@ bool CPU::step() {
   case 0x0d:
     // DRAW VX VY $N
     // Display is at 0xf00 - 0xfff
+    // That is: Memory::vram_addr to Memory::vram_limit
     /* Draws a sprite at coordinate (VX, VY)
        that has a width of 8 pixels and a height of N pixels.
 

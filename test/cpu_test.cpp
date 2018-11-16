@@ -1,5 +1,6 @@
 #include "cpu.h"
 #include "rom.h"
+#include "memory.h"
 #include "gtest/gtest.h"
 
 class CPUTest : public ::testing::Test {
@@ -204,12 +205,12 @@ TEST_F(CPUTest, LDA_dVX) {
 TEST_F(CPUTest, CLS) {
   auto rom = atechips::ROM({0x00, 0xe0});
   _cpu.loadROM(rom);
-  for (int i = 0xf00; i <= 0xfff; i += 2) {
+  for (int i = atechips::Memory::vram_addr; i <= atechips::Memory::mem_limit; i += 2) {
     _cpu.write_to_mem(i, 0xffff);
   }
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
-  for (int i = 0xf00; i <= 0xfff; i+= 2) {
+  for (int i = atechips::Memory::vram_addr; i <= atechips::Memory::mem_limit; i+= 2) {
     EXPECT_EQ(_cpu.fetch(i), 0x0000);
   }
 }
@@ -463,7 +464,7 @@ TEST_F(CPUTest, DRAW_VX_VY_dN_No_collision) {
   EXPECT_EQ(_cpu.I, 0x700);
   EXPECT_EQ(_cpu.V[0xf], 0x0);
 
-  auto i = (0xf00 + (0x8 * 5)) + 1;
+  auto i = (atechips::Memory::vram_addr + (0x8 * 5)) + 1;
   EXPECT_EQ(_cpu.fetch(i), 0xab00);
   i += 0x8;
   EXPECT_EQ(_cpu.fetch(i), 0xab00);
@@ -501,7 +502,7 @@ TEST_F(CPUTest, DRAW_VX_VY_dN_With_collision) {
   EXPECT_EQ(_cpu.I, 0x700);
   EXPECT_EQ(_cpu.V[0xf], 0x0);
 
-  auto i = (0xf00 + (0x8 * 5)) + 1;
+  auto i = (atechips::Memory::vram_addr + (0x8 * 5)) + 1;
   EXPECT_EQ(_cpu.fetch(i), 0xab00);
   i += 0x8;
   EXPECT_EQ(_cpu.fetch(i), 0xab00);
