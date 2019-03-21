@@ -1,3 +1,5 @@
+#pragma once
+
 #include "atechips.h"
 #include <SFML/Graphics.hpp>
 
