@@ -18,6 +18,6 @@
                   helm-ctest-dir (projectile-compilation-dir)
                   ))
          (projectile-project-name . "ate-chips")
-         (projectile-project-run-cmd . "./pf-test-project")
+         (projectile-project-run-cmd . "./ate-chips ../roms/Fishie.ch8")
          (projectile-project-configure-cmd . "cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..")
          (helm-make-arguments . "-j9"))))

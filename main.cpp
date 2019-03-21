@@ -27,6 +27,13 @@ void renderingThread(sf::RenderWindow* window) {
 
     // end the current frame
     window->display();
+
+    sf::Event event;
+    while (window->pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window->close();
+      }
+    }
   }
 }
 
@@ -73,16 +80,6 @@ int main(int argc, char *argv[]) {
   window.setActive(false);
 
   std::thread render(renderingThread, &window);
-
-  while (window.isOpen()) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
-        window.close();
-      }
-    }
-  }
-
   render.join();
 
   return 0;
