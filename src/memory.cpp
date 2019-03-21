@@ -3,7 +3,7 @@
 
 using namespace atechips;
 
-Memory::Memory() {
+Memory::Memory() : _vram() {
   _ram.fill(0);
   // Initialize font data
   std::array<uint8_t, 80> fonts = {0xf0, 0x90, 0x90, 0x90, 0xf0,
@@ -29,25 +29,56 @@ Memory::Memory() {
 }
 
 uint8_t Memory::get_byte(uint16_t addr) {
-  return _ram[addr];
+  if (addr >= vram_addr) {
+    // read from vram
+    auto [row, col] = addr_to_coords(addr);
+    return _vram.read_byte(row, col);
+  } else {
+    return _ram[addr];
+  }
 }
 
 void Memory::loadROM(ROM rom) { _rom = std::move(rom); }
 
 uint16_t Memory::operator[](uint16_t addr) {
-  if (addr >= 0x200 && addr <= 0x600) {
+  if (addr >= rom_lower && addr <= rom_upper) {
     // read from ROM
-    return _rom[addr - 0x200];
+    return _rom[addr - rom_lower];
   }
-  return (_ram[addr] << 8) + _ram[addr + 1];
+  return (get_byte(addr) << 8) + get_byte(addr + 1);
 }
 
 void Memory::write(uint16_t addr, uint16_t val) {
-  // Silently write to RAM even if the address is shadowed by ROM
-  _ram[addr] = val >> 8;
-  _ram[addr + 1] = val & 0xff;
+    write_byte(addr, val >> 8);
+    write_byte(addr + 1, val & 0xff);
 }
 
 void Memory::write_byte(uint16_t addr, uint8_t val) {
-  _ram[addr] = val;
+  if (addr >= vram_addr) {
+    // write to vram
+    auto [row, col] = addr_to_coords(addr);
+    _vram.write_byte(row, col, val);
+  } else {
+    // Silently write to RAM even if the address is shadowed by ROM
+    _ram[addr] = val;
+  }
+}
+
+Vram& Memory::vram() {
+  return _vram;
+}
+
+std::pair<uint8_t, uint8_t> atechips::addr_to_coords(uint16_t addr) {
+  auto base = (addr - atechips::Memory::vram_addr) * 8;
+  auto row = base / Vram::max_col;
+  auto col = base % Vram::max_col;
+  return std::pair<uint8_t, uint8_t>(row, col);
+}
+
+uint16_t atechips::coords_to_addr(uint8_t row, uint8_t col) {
+  auto addr = atechips::Memory::vram_addr;
+
+  addr += (row * 8) + (col / 8);
+
+  return addr;
 }

@@ -6,8 +6,29 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <thread>
+#include <SFML/Graphics.hpp>
 
 using namespace atechips;
+
+void renderingThread(sf::RenderWindow* window) {
+  std::cout << "[render]\n";
+
+  window->setActive(true);
+
+  while (window->isOpen()) {
+    window->clear(sf::Color::Black);
+    // draw
+
+    sf::RectangleShape rect(sf::Vector2f(50.f, 50.f));
+    rect.setFillColor(sf::Color(100, 255, 50));
+
+    window->draw(rect);
+
+    // end the current frame
+    window->display();
+  }
+}
 
 int main(int argc, char *argv[]) {
   std::cout << atechips::sanity();
@@ -37,7 +58,7 @@ int main(int argc, char *argv[]) {
 
   istrm.read(buffer.data(), size);
 
-  std::array<uint8_t, 1024> new_buff;
+  std::array<uint8_t, 1024> new_buff {0};
 
   std::copy_n(std::make_move_iterator(buffer.begin()), size, new_buff.begin());
 
@@ -47,4 +68,22 @@ int main(int argc, char *argv[]) {
     std::cout << std::hex << 0x200 + i << std::dec << '\t'
               << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
+
+  sf::RenderWindow window(sf::VideoMode(800, 600), "AteChips");
+  window.setActive(false);
+
+  std::thread render(renderingThread, &window);
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+    }
+  }
+
+  render.join();
+
+  return 0;
 }

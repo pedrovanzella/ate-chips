@@ -1,5 +1,6 @@
 #include "cpu.h"
 #include "rom.h"
+#include "memory.h"
 #include "gtest/gtest.h"
 
 class CPUTest : public ::testing::Test {
@@ -167,7 +168,7 @@ TEST_F(CPUTest, MOVI_NNN) {
   EXPECT_EQ(_cpu.PC, 0x202);
 }
 
-TEST_F(CPUTest, MOVA_$VX) {
+TEST_F(CPUTest, MOVA_dVX) {
   auto rom = atechips::ROM({0xff, 0x55});
   _cpu.loadROM(rom);
   _cpu.I = 0x602;
@@ -182,7 +183,7 @@ TEST_F(CPUTest, MOVA_$VX) {
   EXPECT_EQ(_cpu.I, 0x612);
 }
 
-TEST_F(CPUTest, LDA_$VX) {
+TEST_F(CPUTest, LDA_dVX) {
   auto rom = atechips::ROM({0xff, 0x65});
   _cpu.loadROM(rom);
   _cpu.I = 0x602;
@@ -204,12 +205,12 @@ TEST_F(CPUTest, LDA_$VX) {
 TEST_F(CPUTest, CLS) {
   auto rom = atechips::ROM({0x00, 0xe0});
   _cpu.loadROM(rom);
-  for (int i = 0xf00; i <= 0xfff; i += 2) {
+  for (int i = atechips::Memory::vram_addr; i <= atechips::Memory::mem_limit; i += 2) {
     _cpu.write_to_mem(i, 0xffff);
   }
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
-  for (int i = 0xf00; i <= 0xfff; i+= 2) {
+  for (int i = atechips::Memory::vram_addr; i <= atechips::Memory::mem_limit; i+= 2) {
     EXPECT_EQ(_cpu.fetch(i), 0x0000);
   }
 }
@@ -258,7 +259,7 @@ TEST_F(CPUTest, SUB_VX_VY_With_Borrow) {
   EXPECT_EQ(_cpu.V[0xf], 0x00);
 }
 
-TEST_F(CPUTest, JMPO_$NNN) {
+TEST_F(CPUTest, JMPO_dNNN) {
   auto rom = atechips::ROM({0xb2, 0x42});
   _cpu.loadROM(rom);
   _cpu.V[0] = 0x2;
@@ -266,7 +267,7 @@ TEST_F(CPUTest, JMPO_$NNN) {
   EXPECT_EQ(_cpu.PC, 0x444);
 }
 
-TEST_F(CPUTest, MOVI_$VX_No_Carry) {
+TEST_F(CPUTest, MOVI_dVX_No_Carry) {
   auto rom = atechips::ROM({0xfa, 0x1e});
   _cpu.loadROM(rom);
   _cpu.I = 0x600;
@@ -278,7 +279,7 @@ TEST_F(CPUTest, MOVI_$VX_No_Carry) {
   EXPECT_EQ(_cpu.V[0xf], 0x0);
 }
 
-TEST_F(CPUTest, MOVI_$VX_With_Carry) {
+TEST_F(CPUTest, MOVI_dVX_With_Carry) {
   auto rom = atechips::ROM({0xfa, 0x1e});
   _cpu.loadROM(rom);
   _cpu.I = 0xf01;
@@ -344,7 +345,7 @@ TEST_F(CPUTest, MOVT_VX) {
   EXPECT_EQ(_cpu.V[0xa], 0xfe);
 }
 
-TEST_F(CPUTest, MOVT_$VX) {
+TEST_F(CPUTest, MOVT_dVX) {
   auto rom = atechips::ROM({0xfa, 0x15});
   _cpu.loadROM(rom);
   EXPECT_EQ(_cpu.step(), true);
@@ -352,7 +353,7 @@ TEST_F(CPUTest, MOVT_$VX) {
   EXPECT_EQ(_cpu.delay_timer, 0x00);
 }
 
-TEST_F(CPUTest, MOVST_$VX) {
+TEST_F(CPUTest, MOVST_dVX) {
   auto rom = atechips::ROM({0xfa, 0x18});
   _cpu.loadROM(rom);
   EXPECT_EQ(_cpu.step(), true);
@@ -360,7 +361,7 @@ TEST_F(CPUTest, MOVST_$VX) {
   EXPECT_EQ(_cpu.sound_timer, 0x00);
 }
 
-TEST_F(CPUTest, CALL_$NNN) {
+TEST_F(CPUTest, CALL_dNNN) {
   auto rom = atechips::ROM({0x23, 0x00});
   _cpu.loadROM(rom);
   EXPECT_EQ(_cpu.PC, 0x200);
@@ -380,7 +381,7 @@ TEST_F(CPUTest, RET) {
   EXPECT_EQ(_cpu.PC, 0x222);
 }
 
-TEST_F(CPUTest, MOVI_$VX) {
+TEST_F(CPUTest, MOVI_dVX) {
   auto rom = atechips::ROM({0xfa, 0x29});
   _cpu.loadROM(rom);
   _cpu.V[0xa] = 0x5;
@@ -436,7 +437,7 @@ TEST_F(CPUTest, JNEQK_VX_False) {
   EXPECT_EQ(_cpu.PC, 0x202);
 }
 
-TEST_F(CPUTest, RANDAND_VX_$AB) {
+TEST_F(CPUTest, RANDAND_VX_dAB) {
   auto rom = atechips::ROM({0xca, 0xab});
   _cpu.loadROM(rom);
   _cpu.V[0xa] = 0x42;
@@ -446,78 +447,57 @@ TEST_F(CPUTest, RANDAND_VX_$AB) {
   EXPECT_EQ(_cpu.V[0xa], 0xab & 100);
 }
 
-TEST_F(CPUTest, DRAW_VX_VY_$N_No_collision) {
+TEST_F(CPUTest, DRAW_VX_VY_dN_No_collision) {
   auto rom = atechips::ROM({0xda, 0xb8});
   _cpu.loadROM(rom);
-  _cpu.V[0xa] = 5;
-  _cpu.V[0xb] = 8;
+  _cpu.V[0xa] = 0;
+  _cpu.V[0xb] = 0;
   _cpu.I = 0x700;
-  // Memory is blank, no collision
-  _cpu.write_to_mem(0x700, 0xabab);
-  _cpu.write_to_mem(0x702, 0xabab);
-  _cpu.write_to_mem(0x704, 0xabab);
-  _cpu.write_to_mem(0x708, 0xabab);
+
+  EXPECT_EQ(_cpu.fetch(atechips::Memory::vram_addr), 0x0); // vram starts blank
+
+  for (auto a = 0x700; a < 0x70a; a += 2) {
+    // Seed some arbitrary data where I points to
+    _cpu.write_to_mem(a, 0xabab);
+  }
 
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
-  EXPECT_EQ(_cpu.I, 0x700);
-  EXPECT_EQ(_cpu.V[0xf], 0x0);
+  EXPECT_EQ(_cpu.I, 0x700); // I doesn't change
+  EXPECT_EQ(_cpu.V[0xf], 0x0); // collision is unset
 
-  auto i = (0xf00 + (0x8 * 5)) + 1;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
+  // Expect it to have written to the proper locations
+  for (int i = 0; i < 8; ++i) {
+    EXPECT_EQ(_cpu.memory().vram().read_byte(i, 0), 0xab);
+  }
 }
 
-TEST_F(CPUTest, DRAW_VX_VY_$N_With_collision) {
+TEST_F(CPUTest, DRAW_VX_VY_dN_With_collision) {
   auto rom = atechips::ROM({0xda, 0xb8});
   _cpu.loadROM(rom);
-  _cpu.V[0xa] = 5;
-  _cpu.V[0xb] = 8;
+  _cpu.V[0xa] = 0;
+  _cpu.V[0xb] = 0;
   _cpu.I = 0x700;
 
-  _cpu.write_to_mem(0xf29, 0xff);
+  EXPECT_EQ(_cpu.fetch(atechips::Memory::vram_addr), 0x0); // vram starts blank
 
-  _cpu.write_to_mem(0x700, 0xabab);
-  _cpu.write_to_mem(0x702, 0xabab);
-  _cpu.write_to_mem(0x704, 0xabab);
-  _cpu.write_to_mem(0x708, 0xabab);
+  // write something to video memory
+  _cpu.write_to_mem(atechips::Memory::vram_addr, 0xffff);
+
+  EXPECT_EQ(_cpu.fetch(atechips::Memory::vram_addr), 0xffff); // wrote through MMU
+
+  for (auto a = 0x700; a < 0x70a; a += 2) {
+    // Seed some arbitrary data where I points to
+    _cpu.write_to_mem(a, 0xabab);
+  }
 
   EXPECT_EQ(_cpu.step(), true);
   EXPECT_EQ(_cpu.PC, 0x202);
   EXPECT_EQ(_cpu.I, 0x700);
-  EXPECT_EQ(_cpu.V[0xf], 0x0);
+  EXPECT_EQ(_cpu.V[0xf], 0x1); // collision should be set
 
-  auto i = (0xf00 + (0x8 * 5)) + 1;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-  EXPECT_EQ(_cpu.fetch(i), 0xab00);
-  i += 0x8;
-
-  EXPECT_EQ(_cpu.V[0xf], 0x1);
+  // Expect it to have written to the proper locations
+  for (int i = 0; i < 8; ++i) {
+    EXPECT_EQ(_cpu.memory().vram().read_byte(i, 0), 0xab);
+  }
 }

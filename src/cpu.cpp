@@ -36,7 +36,7 @@ bool CPU::step() {
     }
     if (nibbles[3] == 0x0) {
       // CLS
-      for (int i = 0xf00; i <= 0xfff; i += 2) {
+      for (int i = Memory::vram_addr; i <= Memory::mem_limit; i += 2) {
         _memory.write(i, 0x0000);
       }
       PC += 2;
@@ -199,9 +199,9 @@ bool CPU::step() {
     PC += 2;
     return true;
   case 0x0d:
-    // TODO
     // DRAW VX VY $N
     // Display is at 0xf00 - 0xfff
+    // That is: Memory::vram_addr to Memory::vram_limit
     /* Draws a sprite at coordinate (VX, VY)
        that has a width of 8 pixels and a height of N pixels.
 
@@ -212,6 +212,18 @@ bool CPU::step() {
 
        VF is set to 1 if any screen pixels are flipped from set to
        unset when the sprite is drawn, and to 0 if that doesn’t happen */
+      {
+        auto vx = V[nibbles[1]];
+        auto vy = V[nibbles[2]];
+        auto n = nibbles[3];
+        for (int i = 0; i < n; ++i)
+        {
+          if(_memory.vram().write_byte(vx + i, vy, _memory.get_byte(I + i))) {
+            V[0xf] = 0x1;
+          }
+        }
+      }
+      PC += 2;
     return true;
   case 0x0e:
     if (nibbles[2] == 0x09 && nibbles[3] == 0x0e) {
@@ -330,4 +342,8 @@ uint16_t CPU::pop_from_stack() {
 
 void CPU::set_rng(int start, int end) {
   _rng = std::uniform_int_distribution<>(start, end);
+}
+
+Memory& CPU::memory() {
+  return _memory;
 }

@@ -32,6 +32,8 @@ public:
   uint8_t delay_timer;
   uint8_t sound_timer;
 
+  Memory& memory();
+
   void start_timers();
 
   void set_rng(int start, int end);
