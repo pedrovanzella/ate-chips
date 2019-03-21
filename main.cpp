@@ -31,6 +31,7 @@ void renderingThread(sf::RenderWindow* window) {
     sf::Event event;
     while (window->pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
+        std::cout << "[event] window close";
         window->close();
       }
     }
@@ -76,7 +77,7 @@ int main(int argc, char *argv[]) {
               << rom.get_hex_word(i) << '\t' << rom.disassemble_word(i) << '\n';
   }
 
-  sf::RenderWindow window(sf::VideoMode(800, 600), "AteChips");
+  sf::RenderWindow window(sf::VideoMode(800, 600), "AteChips", sf::Style::None); // Hack to get my wm to display the window as floating
   window.setActive(false);
 
   std::thread render(renderingThread, &window);
